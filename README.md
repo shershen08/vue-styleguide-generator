@@ -9,13 +9,11 @@ Target is to have some tool with at least some of the [React version](https://gi
  - Clone or download this repo
  - ```npm install```
  - ```node index.js``` 
- - you should see a simple console output of the 'VueSound.vue' file containing **component name, props, data object and other properties of export default object**.
+ - you should see a simple console output of the 'VueSound.vue' [sample component file](https://github.com/shershen08/vue-styleguide-generator/blob/master/example-components/VueSound.vue) containing **component name, props, data object and other properties of export default object**.
         
-        
+         
+### Todos
  
- 
- ### Todos
- 
-  - iterate .vue files in given folder
-  - Generate html files
-  - Parse .md files in the component's folders (if any)
+ - iterate .vue files in given folder
+ - Generate html files
+ - Parse .md files in the component's folders (if any)
