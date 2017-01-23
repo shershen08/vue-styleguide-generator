@@ -2,11 +2,20 @@
 
 Initially started after reading [this feature request](https://github.com/vuejs/vue-requests/issues/17).
 Now only basic proof of concept is availbale which can load .vue file, parse it and extract basic props of it.
-Target is to have some tool with at least som of the [React version](https://github.com/styleguidist/react-styleguidist) capabilities.
+Target is to have some tool with at least some of the [React version](https://github.com/styleguidist/react-styleguidist) capabilities.
 
 ### How to try
 
- - Clone ot download this repo
+ - Clone or download this repo
  - ```npm install```
  - ```node index.js``` 
- - you'll see simple console output of the 'VueSound.vue' file
+ - you should see a simple console output of the 'VueSound.vue' file containing **component name, props, data object and other properties of export default object**.
+        
+        
+ 
+ 
+ ### Todos
+ 
+  - iterate .vue files in given folder
+  - Generate html files
+  - Parse .md files in the component's folders (if any)
