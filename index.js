@@ -1,3 +1,3 @@
-import CollectionDrawer from './src/main'
+var libDrawer = require('./src/walker');
 
-export default CollectionDrawer
+libDrawer.iterateComponentsFolder();

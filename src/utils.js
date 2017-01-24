@@ -3,6 +3,8 @@ export default {
   },
   propsTable: () => {
   },
+
+
   methodsList: () => {
   }
 }
