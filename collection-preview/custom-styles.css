@@ -1,0 +1,12 @@
+code {
+  padding: 20px;
+background: #f8f8f8;
+width: 90%;
+display: block;
+}
+h3 {
+  color: #42b983;
+}
+.mdl-layout__drawer .mdl-navigation .mdl-navigation__link:hover {
+  background: #a8eacc;
+}
