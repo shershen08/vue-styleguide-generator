@@ -15,8 +15,8 @@ Target is to have some tool with at least some of the [React version](https://gi
 ### Todos
 
 - test
- - core: merge component file with .md file in the same directory
- - core: move the demo-page to use Vue so that components can be generated from its declaration
- - ui: search in list of components
- - ui: output extra component parameters (computable, data)
+- core: merge component file with .md file in the same directory
+- core: move the demo-page to use Vue so that components can be generated from its declaration
+- ui: search in list of components
+- ui: output extra component parameters (computable, data)
 
