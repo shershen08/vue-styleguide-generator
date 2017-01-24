@@ -9,8 +9,8 @@ Target is to have some tool with at least some of the [React version](https://gi
  - Clone or download this repo
  - ```npm install```
  - ```npm run build``` 
- - if you open the  '/collection-preview/index.html' you should see list of existing components with details
-        
+ - if you open the  '/collection-preview/index.html' you should see list of existing components with navigation to their details like this:
+ ![resulting output](https://raw.githubusercontent.com/shershen08/vue-styleguide-generator/master/demo-output.jpg)
          
 ### Todos
 
