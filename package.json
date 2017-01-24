@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node-debug index.js",
-    "build": "echo \"todo\""
+    "build": "node ./index.js"
   },
   "author": {
     "name": "Mikhail Kuznetcov",
