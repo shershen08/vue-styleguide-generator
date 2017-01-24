@@ -4,9 +4,12 @@ var nodedir = require('node-dir');
 var markdown = require( "markdown" ).markdown;
 
 var fileProcessor = require('./processor');
-var display = require('./drawer');
+var drawer = require('./drawer');
+
 
 const COMPONENTS_FOLDER = 'example-components'
+const OUTPUT_FOLDER = 'collection-preview'
+const OUTPUT_FILENAME = 'index.html'
 
 
 module.exports = {
@@ -24,15 +27,25 @@ module.exports = {
 const intermediateCheck = (err, content, next) => {
   next();
 }
+const generateFullPage = (links, comps) => {
+  let data = {
+    links,
+    comps
+  }
+
+  fs.writeFileSync(path.resolve(OUTPUT_FOLDER, OUTPUT_FILENAME), drawer.generatePage(data));
+}
 const generateFiles = (err, files) => {
   if (err) throw err;
 
-  console.log(display.generateLinkList(files));
+  let linksHTML = drawer.generateLinkList(files);
+  let compsHTML = [];
 
   if(files.length) files.forEach(function(file){
-    let res = processFileByType(file);
-    console.log(res);
+    compsHTML.push(processFileByType(file));
   })
+
+  generateFullPage(linksHTML, compsHTML);
 }
 const getFile = (filename) => {
   return path.resolve(componentsFolder, filename);
@@ -48,7 +61,7 @@ const processFileByType = (file) => {
 }
 const readComponent = (loadFile) => {
   let vueFile = fs.readFileSync(loadFile, {encoding: 'utf-8'})
-  return display.generateComponentDescription(fileProcessor.processComponent(vueFile), loadFile);
+  return drawer.generateComponentDescription(fileProcessor.processComponent(vueFile), loadFile);
 }
 
 const readMDfile = (loadFile) => {

@@ -1,2 +1,7 @@
 var libGenerator = require('./src/main');
-libGenerator.run();
+
+const myComponentsPath = 'example-components'
+const myOutputPath = 'collection-preview';
+const options = {};
+
+libGenerator.run(myComponentsPath, myOutputPath, options);

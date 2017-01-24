@@ -3,6 +3,12 @@ html
   include partials/header.pug
   body
     include partials/head.pug
-    h1 My Site
-    p Welcome to my super lame site.
+    div(class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer")
+      div(class="mdl-layout__drawer")
+        span(class="mdl-layout-title") Collection
+        !=links
+      main(class="mdl-layout__content")
+        div(class="page-content")
+          div(class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800")
+            !=comps
     include partials/footer.pug

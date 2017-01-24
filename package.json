@@ -1,15 +1,29 @@
 {
-  "name": "vue-component-library",
-  "version": "0.0.1",
-  "description": "",
+  "name": "vue-styleguide-generator",
+  "version": "0.0.2",
+  "description": "Styleguide generator for your Vue.js components",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node-debug index.js",
     "build": "echo \"todo\""
   },
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Mikhail Kuznetcov",
+    "email": "michail.kuznetcov@gmail.com"
+  },
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/shershen08/vue-styleguide-generator"
+    },
+    "homepage": "",
+    "keywords": [
+      "vue",
+      "vuejs",
+      "generator",
+      "library"
+    ],
+  "license": "MIT",
   "dependencies": {
     "consolidate": "^0.14.0",
     "hash-sum": "^1.0.2",
