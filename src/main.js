@@ -1,7 +1,9 @@
-import Walker from './walker'
-import Drawer from './drawer'
-import Processor from './processor'
+var walker = require('./walker');
 
-export default class CollectionDrawer {
+const mainMethod = () => {
+  walker.iterateComponentsFolder();
+}
 
+module.exports = {
+  run : mainMethod
 }

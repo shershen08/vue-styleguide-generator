@@ -16,37 +16,42 @@ module.exports = {
     nodedir.readFiles(folderName, {
       match: /.vue|.md$/,
       exclude: /^\./
-      }, function(err, content, next) {
-          next();
       },
-      function(err, files){
-          if (err) throw err;
-          if(files.length) files.forEach(function(file){
-            processFileByType(file);
-          })
-      });
+      intermediateCheck,
+      generateFiles);
   }
 }
+const intermediateCheck = (err, content, next) => {
+  next();
+}
+const generateFiles = (err, files) => {
+  if (err) throw err;
 
+  console.log(display.generateLinkList(files));
+
+  if(files.length) files.forEach(function(file){
+    let res = processFileByType(file);
+    console.log(res);
+  })
+}
 const getFile = (filename) => {
   return path.resolve(componentsFolder, filename);
 }
 
 const processFileByType = (file) => {
-  console.log('\n\n File name ', file);
   var ext = file.split('.')[1];
   if(ext === 'md'){
-    readMDfile(file)
+    return readMDfile(file)
   } else {
-    readComponent(file)
+    return readComponent(file)
   }
 }
 const readComponent = (loadFile) => {
   let vueFile = fs.readFileSync(loadFile, {encoding: 'utf-8'})
-  display.generateComponentDescription(fileProcessor.processComponent(vueFile));
+  return display.generateComponentDescription(fileProcessor.processComponent(vueFile), loadFile);
 }
 
 const readMDfile = (loadFile) => {
   let mdFile = fs.readFileSync(loadFile, {encoding: 'utf-8'});
-  console.log( markdown.toHTML(mdFile) );
+  return markdown.toHTML(mdFile);
 }

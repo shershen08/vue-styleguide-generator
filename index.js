@@ -1,3 +1,2 @@
-var libDrawer = require('./src/walker');
-
-libDrawer.iterateComponentsFolder();
+var libGenerator = require('./src/main');
+libGenerator.run();
