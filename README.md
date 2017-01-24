@@ -8,12 +8,15 @@ Target is to have some tool with at least some of the [React version](https://gi
 
  - Clone or download this repo
  - ```npm install```
- - ```node index.js``` 
- - you should see a simple console output of the 'VueSound.vue' [sample component file](https://github.com/shershen08/vue-styleguide-generator/blob/master/example-components/VueSound.vue) containing **component name, props, data object and other properties of export default object**.
+ - ```npm run build``` 
+ - if you open the  '/collection-preview/index.html' you should see list of existing components with details
         
          
 ### Todos
- 
- - iterate .vue files in given folder
- - Generate html files
- - Parse .md files in the component's folders (if any)
+
+- test
+- core: merge component file with .md file in the same directory
+- core: move the demo-page to use Vue so that components can be generated from its declaration
+- ui: search in list of components
+- ui: output extra component parameters (computable, data)
+
