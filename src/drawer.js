@@ -9,11 +9,11 @@ let pageTemplate;
 
 module.exports = {
   generatePage: function (data) {
-    let templatePath = path.resolve(__dirname, TEMPLATES_FOLDER, 'pageTemplate.pug')
-    return pug.renderFile(templatePath, data)
+    let pageTemplatePath = path.resolve(__dirname, TEMPLATES_FOLDER, 'pageTemplate.pug')
+    return pug.renderFile(pageTemplatePath, data)
   },
   generateLinkList: function (componentArray) {
-    let templatePath = path.resolve(__dirname, TEMPLATES_FOLDER, TEMPLATES_PARTIALS_FOLDER, 'linkList.pug')
+    let linkListTemplatePath = path.resolve(__dirname, TEMPLATES_FOLDER, TEMPLATES_PARTIALS_FOLDER, 'linkList.pug')
     componentArray = componentArray.map((f) => {
       let fileName = path.basename(f)
       return {
@@ -24,16 +24,12 @@ module.exports = {
     let data = {
       items: componentArray
     }
-    return pug.renderFile(templatePath, data)
+    return pug.renderFile(linkListTemplatePath, data)
   },
   generateComponentDescription: function (componentData) {
-    debugger;
-    let templatePath = path.resolve(__dirname, TEMPLATES_FOLDER, 'componentTemplate.pug')
-    return pug.renderFile(templatePath, componentData)
+    let componentDescriptionTemplatePath = path.resolve(__dirname, TEMPLATES_FOLDER, 'componentTemplate.pug')
+    return pug.renderFile(componentDescriptionTemplatePath, componentData)
 
-  // todos:
-  //  - data
-  //  - ?dependances
-  // - child elements from 'components' obj
+  // todos: data, ?dependances, child elements from 'components' obj
   }
 }

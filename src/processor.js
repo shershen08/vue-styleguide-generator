@@ -3,8 +3,6 @@ var babel = require('babel-core')
 const vm = require('vm')
 const util = require('util')
 
-// export default class Processor
-
 module.exports = {
   processComponent: (content) => {
     const jscode = getComponentModuleJSCode(content)

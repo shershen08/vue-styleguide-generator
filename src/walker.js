@@ -2,6 +2,8 @@ var path = require('path')
 var fs = require('fs')
 var nodedir = require('node-dir');
 var markdown = require( "markdown" ).markdown;
+var Q = require('Q');
+
 
 var fileProcessor = require('./processor');
 var drawer = require('./drawer');
@@ -18,7 +20,6 @@ let componentTree = [];
 module.exports = {
   iterateComponentsFolder : (folderFromName, folderToName, options) => {
 
-
     // nodedir.subdirs(folderFromName, function(err, subdirs) {
     //     if (err) throw err;
     //     console.log(subdirs);
@@ -27,7 +28,6 @@ module.exports = {
     // 1) root flat files -> push, readFilesStream( dir, [options], streamCallback, [finishedCallback] ) NO RECURSIVE
     // 2) subdirs -> list, for list
     // 3) flat files -> push, readFilesStream
-
 
     setVariables(folderFromName, folderToName, options);
 
@@ -49,15 +49,21 @@ const setVariables = (folderFromName, folderToName, options) => {
 const intermediateCheck = (err, content, next) => {
   next();
 }
+
 const generateFullPage = (treeArray) => {
-  debugger;
+
   let links = drawer.generateLinkList(treeArray.map((x) => x.link))
   let comps = treeArray.map((x) => drawer.generateComponentDescription(x.comp))
+
 
   let data = {
     links,
     comps
   }
+  /*
+  * assumption, script path: PROJECT_ROOT/node_modules/vue-styleguide-generator/
+  * assumption, output assumption PROJECT_ROOT/<outputPath>
+  */
   var dirPath = path.resolve(__dirname, '..', '..', '..', outputPath)
   var pagePath = path.resolve(__dirname, '..', '..', '..', outputPath, OUTPUT_FILENAME)
   if (!fs.existsSync(dirPath)) {
@@ -114,7 +120,7 @@ const readComponent = (loadFile) => {
   let data = {
     _isWrapper: false,
     itemTitle: componentObject.name || path.basename(loadFile).split('.')[0],
-    loadFile,
+    fileName: loadFile,
     compInitialData : (componentObject.data ? componentObject.data() : ''),
     computed: utils.showIfAny(componentObject.computed),
     props: utils.showIfAny(componentObject.props),

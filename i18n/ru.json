@@ -6,5 +6,7 @@
   "html_component_subtitle_props":"Свойства",
   "html_component_subtitle_methods":"Методы",
   "html_component_subtitle_usage":"Использование",
-  "html_component_subtitle_readme":"Readme"
+  "html_component_subtitle_readme":"Readme",
+  "html_component_search":"Поиск...",
+  "html_component_footer":"Vue component library &copy; 2017"
 }

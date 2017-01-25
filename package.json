@@ -1,6 +1,6 @@
 {
   "name": "vue-styleguide-generator",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Styleguide generator for your Vue.js components",
   "main": "index.js",
   "scripts": {
@@ -12,38 +12,41 @@
     "name": "Mikhail Kuznetcov",
     "email": "michail.kuznetcov@gmail.com"
   },
-   "repository": {
-      "type": "git",
-      "url": "https://github.com/shershen08/vue-styleguide-generator"
-    },
-    "homepage": "",
-    "keywords": [
-      "vue",
-      "vuejs",
-      "generator",
-      "library",
-      "styleguide",
-      "components"
-    ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shershen08/vue-styleguide-generator"
+  },
+  "homepage": "",
+  "keywords": [
+    "vue",
+    "vuejs",
+    "generator",
+    "library",
+    "styleguide",
+    "components"
+  ],
   "license": "MIT",
   "dependencies": {
     "consolidate": "^0.14.0",
     "hash-sum": "^1.0.2",
-    "jade": "^1.11.0",
     "js-beautify": "^1.6.3",
     "loader-utils": "^0.2.10",
     "lru-cache": "^4.0.2",
     "markdown": "^0.5.0",
     "markdown-js": "0.0.3",
+    "minimist": "^1.2.0",
     "node-dir": "^0.1.16",
     "object-assign": "^4.0.0",
     "postcss": "^5.0.10",
     "postcss-selector-parser": "^2.0.0",
     "pug": "^2.0.0-beta7",
+    "q": "^1.4.1",
     "source-map": "^0.5.6",
+    "vue": "^2.1.10",
     "vue-hot-reload-api": "^2.0.1",
+    "vue-server-renderer": "^2.1.10",
     "vue-style-loader": "^1.0.0",
-    "vue-template-compiler": "^2.1.8",
+    "vue-template-compiler": "^2.1.10",
     "vue-template-es2015-compiler": "^1.2.2"
   },
   "devDependencies": {
