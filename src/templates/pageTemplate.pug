@@ -3,12 +3,15 @@ html
   include partials/header.pug
   body
     include partials/head.pug
-    div(class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer")
+    .mdl-layout.mdl-js-layout.mdl-layout--fixed-drawer
       div(class="mdl-layout__drawer")
+        form
+          .mdl-textfield.mdl-js-textfield.search-area
+            input(class="mdl-textfield__input js-component-search",type="text",placeholder="Search...")
         span(class="mdl-layout-title") Collection
         !=links
       main(class="mdl-layout__content")
-        div(class="page-content")
-          div(class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800")
+        .page-content
+          .demo-content.mdl-color--white.mdl-shadow--4dp.content.mdl-color-text--grey-800
             !=comps
     include partials/footer.pug

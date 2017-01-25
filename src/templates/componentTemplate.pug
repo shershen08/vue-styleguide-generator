@@ -1,14 +1,24 @@
 section(id=htmlBlockId)
   div(class="demo-crumbs mdl-color-text--grey-500")= fileName
   h3= itemTitle
-  h4 Properties
-  ul
-    each val in props
-      li= val
-  h4 Methods
-  ul
-    each val in methods
-      li= val
+  //Properties
+  if props.length
+    h4 Properties
+    ul
+      each val in props
+        li= val
+  //Methods
+  if methods.length
+    h4 Methods
+    ul
+      each val in methods
+        li= val
+  //Methods
+  if methods.length
+    h4 Methods
+    ul
+      each val in methods
+        li= val
   h4 Usage
   br
   code= componentCode

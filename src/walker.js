@@ -5,6 +5,7 @@ var markdown = require( "markdown" ).markdown;
 
 var fileProcessor = require('./processor');
 var drawer = require('./drawer');
+var utils = require('./utils');
 
 const COMPONENTS_FOLDER = 'example-components'
 const OUTPUT_FOLDER = 'collection-preview'
@@ -12,6 +13,7 @@ const OUTPUT_FILENAME = 'index.html'
 
 let outputPath;
 let runOptions;
+let componentTree = [];
 
 module.exports = {
   iterateComponentsFolder : (folderFromName, folderToName, options) => {
@@ -19,8 +21,8 @@ module.exports = {
     setVariables(folderFromName, folderToName, options);
 
     nodedir.readFiles(folderFromName, {
-      match: /.vue|.md$/,
-      exclude: /^\./
+      match: /.vue$/, //|.md
+      exclude: (runOptions.exclude || /^\./)
       },
       intermediateCheck,
       generateFiles);
@@ -34,7 +36,11 @@ const setVariables = (folderFromName, folderToName, options) => {
 const intermediateCheck = (err, content, next) => {
   next();
 }
-const generateFullPage = (links, comps) => {
+const generateFullPage = (treeArray) => {
+  debugger;
+  let links = drawer.generateLinkList(treeArray.map((x) => x.link))
+  let comps = treeArray.map((x) => drawer.generateComponentDescription(x.comp))
+
   let data = {
     links,
     comps
@@ -45,17 +51,26 @@ const generateFullPage = (links, comps) => {
 const generateFiles = (err, files) => {
   if (err) throw err;
 
-  let linksHTML = drawer.generateLinkList(files);
-  let compsHTML = [];
-
   if(files.length) {
-    files.forEach(function(file){
-      compsHTML.push(processFileByType(file));
+    items = files.map(function(file){
+      return {
+          comp: processFileByType(file),
+          link: file
+      };
     });
-    generateFullPage(linksHTML, compsHTML);
+
+    generateFullPage(modifyComponentsTree(items));
+
     logResult(files.length, runOptions.i18n.console_processed);
+  } else {
+    logError(runOptions.i18n.console_no_files_found);
   }
 }
+const modifyComponentsTree = (list) => {
+  let filtered = list.filter((x) => !x.comp._isWrapper)
+  return filtered;
+}
+
 const getFile = (filename) => {
   return path.resolve(componentsFolder, filename);
 }
@@ -68,9 +83,34 @@ const processFileByType = (file) => {
     return readComponent(file)
   }
 }
+const isSimpleWrapperComponent = (obj) => {
+  if(!obj.methods.length && !obj.props.length && !obj.computed.length) return true;
+  return false;
+}
+
 const readComponent = (loadFile) => {
   let vueFile = fs.readFileSync(loadFile, {encoding: 'utf-8'})
-  return drawer.generateComponentDescription(fileProcessor.processComponent(vueFile), loadFile);
+
+  let componentObject = fileProcessor.processComponent(vueFile);
+  let componentCode = utils.componentCodeFromName(componentObject);
+
+  let data = {
+    _isWrapper: false,
+    itemTitle: componentObject.name || path.basename(loadFile).split('.')[0],
+    loadFile,
+    compInitialData : (componentObject.data ? componentObject.data() : ''),
+    computed: utils.showIfAny(componentObject.computed),
+    props: utils.showIfAny(componentObject.props),
+    methods: utils.showIfAny(componentObject.methods),
+    componentCode,
+    htmlBlockId: path.basename(loadFile).split('.')[0]
+  };
+
+  if(isSimpleWrapperComponent(data)){
+    data._isWrapper = true;
+  }
+
+  return data;
 }
 
 const readMDfile = (loadFile) => {
@@ -80,4 +120,7 @@ const readMDfile = (loadFile) => {
 
 const logResult = (text, suffix) => {
   console.log(text + suffix)
+}
+const logError = (text) => {
+  console.log(text)
 }

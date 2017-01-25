@@ -6,10 +6,11 @@ const util = require('util')
 // export default class Processor
 
 module.exports = {
-  processComponent : (content) => {
+  processComponent: (content) => {
     const jscode = getComponentModuleJSCode(content)
+    if(!jscode) return;
     const babelifycode = babelifyCode(jscode)
-    return evalComponentCode(babelifycode.code);
+    return evalComponentCode(babelifycode.code)
   }
 }
 
@@ -19,18 +20,20 @@ const babelifyCode = (code) => {
     comments: false,
     presets: ['es2015']
   }
-  return babel.transform(code, options);
+  return babel.transform(code, options)
 }
 const getComponentModuleJSCode = (file) => {
   var parts = parse(file, 'name', false)
-  return parts.script.content;
+  return parts.script ? parts.script.content : '';
 }
 
 const evalComponentCode = (code) => {
   const sandbox = {
     exports: {},
-    require : function(){
-      
+    require: function () {},
+    window: {},
+    console: {
+      log: function () {}
     }
   }
   const script = new vm.Script(code, {})

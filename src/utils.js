@@ -14,6 +14,9 @@ const methods = {
         return componentFileName.split('.')[0];
       }
       return module.exports.kebabToCamel(componentObject.name);
+  },
+  showIfAny: (obj) => {
+    return obj ? Object.keys(obj) : [];
   }
 }
 module.exports = methods;

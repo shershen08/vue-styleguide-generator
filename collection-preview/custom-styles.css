@@ -1,12 +1,27 @@
 code {
   padding: 20px;
-background: #f8f8f8;
-width: 90%;
-display: block;
+  background: #f8f8f8;
+  width: 90%;
+  display: block;
 }
 h3 {
   color: #42b983;
 }
 .mdl-layout__drawer .mdl-navigation .mdl-navigation__link:hover {
   background: #a8eacc;
+}
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: 10000;
+  background: #fff;
+}
+footer p {
+  padding: 10px 0px 10px 20px;
+  margin: 0;
+  color: #ccc;
+}
+.search-area input {
+  margin: 10px 0px 0px 20px;
 }

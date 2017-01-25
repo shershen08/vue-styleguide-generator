@@ -1,10 +1,13 @@
 {
   "console_processed":" files processed",
   "console_error":" error happened",
+  "console_no_files_found":"No component files found",
   "html_components_title":"Collection",
   "html_page_title":"Components styleguide",
   "html_component_subtitle_props":"Properties",
   "html_component_subtitle_methods":"Methods",
   "html_component_subtitle_usage":"Usage",
-  "html_component_subtitle_readme":"Readme"
+  "html_component_subtitle_readme":"Readme",
+  "html_component_search":"Search...",
+  "html_component_footer":"Vue component library &copy; 2017"
 }
