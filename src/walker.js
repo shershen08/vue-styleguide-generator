@@ -58,8 +58,12 @@ const generateFullPage = (treeArray) => {
     links,
     comps
   }
-  var pagePath = path.resolve(outputPath, OUTPUT_FILENAME);
-  fs.writeFileSync(pagePath, drawer.generatePage(data));
+  var dirPath = path.resolve(__dirname, '..', '..', '..', outputPath)
+  var pagePath = path.resolve(__dirname, '..', '..', '..', outputPath, OUTPUT_FILENAME)
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath)
+  }
+  fs.writeFileSync(pagePath, drawer.generatePage(data))
 }
 const generateFiles = (err, files) => {
   if (err) throw err;

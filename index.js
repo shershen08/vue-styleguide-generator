@@ -13,8 +13,8 @@ var args = process.argv.slice(2);
 console.log(args);
 
 const options = {
-  src: 'example-components',
-  dest: 'collection-preview'
+  src: 'src',
+  dest: 'components-preview'
 };
 
 libGenerator.run(options);
