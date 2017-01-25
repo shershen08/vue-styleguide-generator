@@ -6,11 +6,11 @@ const localeFileName = locale + '.json'
 
 var localeFile = require(path.resolve('i18n', localeFileName));
 
-const mainMethod = (from, to, callOptions) => {
+const mainMethod = (callOptions) => {
   const options  = Object.assign({}, callOptions, {
     i18n: localeFile
   })
-  walker.iterateComponentsFolder(from, to, options);
+  walker.iterateComponentsFolder(options.src, options.dest, options);
 }
 
 module.exports = {

@@ -18,11 +18,24 @@ let componentTree = [];
 module.exports = {
   iterateComponentsFolder : (folderFromName, folderToName, options) => {
 
+
+    // nodedir.subdirs(folderFromName, function(err, subdirs) {
+    //     if (err) throw err;
+    //     console.log(subdirs);
+    // });
+    //
+    // 1) root flat files -> push, readFilesStream( dir, [options], streamCallback, [finishedCallback] ) NO RECURSIVE
+    // 2) subdirs -> list, for list
+    // 3) flat files -> push, readFilesStream
+
+
     setVariables(folderFromName, folderToName, options);
 
     nodedir.readFiles(folderFromName, {
       match: /.vue$/, //|.md
-      exclude: (runOptions.exclude || /^\./)
+      exclude: (runOptions.exclude || /^\./),
+      excludeDir: runOptions.excludeDir,
+      matchDir:runOptions.matchDir,
       },
       intermediateCheck,
       generateFiles);

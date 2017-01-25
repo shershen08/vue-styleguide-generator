@@ -1,3 +1,7 @@
+/*
+* vue single file components parser
+* from vue-loader
+*/
 var compiler = require('vue-template-compiler')
 var cache = require('lru-cache')(100)
 var hash = require('hash-sum')

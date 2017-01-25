@@ -1,4 +1,4 @@
-var parse = require('./../lib/parser')
+var parse = require('./parser')
 var babel = require('babel-core')
 const vm = require('vm')
 const util = require('util')
