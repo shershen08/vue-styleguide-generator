@@ -1,6 +1,7 @@
 {
   "console_processed":" файлов обработано",
   "console_error":" произошла ошибка",
+  "console_processing": "",
   "html_components_title":"Компоненты",
   "html_page_title":"Брендбук компонентов",
   "html_component_subtitle_props":"Свойства",

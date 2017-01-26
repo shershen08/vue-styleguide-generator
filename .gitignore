@@ -4,3 +4,4 @@ dist/
 npm-debug.log
 example-components/
 src-test/
+tmp-dev/

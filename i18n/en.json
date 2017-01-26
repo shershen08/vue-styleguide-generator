@@ -1,6 +1,7 @@
 {
   "console_processed":" files processed",
   "console_error":" error happened",
+  "console_processing":"Processing ",
   "console_no_files_found":"No component files found",
   "html_components_title":"Collection",
   "html_page_title":"Components styleguide",

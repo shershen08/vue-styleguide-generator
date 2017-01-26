@@ -9,20 +9,18 @@ var drawer = require('./drawer');
 var utils = require('./utils');
 var walker = require('./walker');
 
-const COMPONENTS_FOLDER = 'example-components'
-const OUTPUT_FOLDER = 'collection-preview'
 const OUTPUT_FILENAME = 'index.html'
 const CUSTOM_CSS = 'style/custom-styles.css';
 
-let outputPath;
 let runOptions;
 
 module.exports = {
-  iterateComponentsFolder : (folderFromName, folderToName, options) => {
+  iterateComponentsFolder : (options) => {
 
-    setVariables(folderFromName, folderToName, options);
+    runOptions = options;
+    setVariables(options.src, folderToName, options);
 
-    walker.walk(folderFromName, runOptions, function(result){
+    walker.walk(options.src, runOptions, function(result){
       sortOutResultingList(result);
     })
   }
@@ -56,12 +54,6 @@ const fileNamesAreComplimentary = (filesArray) => {
   return false;
 }
 
-const setVariables = (folderFromName, folderToName, options) => {
-  runOptions = options;
-  folderFromName = folderFromName || COMPONENTS_FOLDER;
-  outputPath = folderToName || OUTPUT_FOLDER;
-}
-
 const generateFullPage = (treeArray) => {
 
   let links = drawer.generateLinkList(treeArray.map((x) => x.link))
@@ -74,10 +66,10 @@ const generateFullPage = (treeArray) => {
   }
   /*
   * assumption, script path: PROJECT_ROOT/node_modules/vue-styleguide-generator/
-  * assumption, output assumption PROJECT_ROOT/<outputPath>
+  * assumption, output path PROJECT_ROOT/<runOptions.dest>
   */
-  var dirPath = path.resolve(__dirname, '..', '..', '..', outputPath)
-  var pagePath = path.resolve(__dirname, '..', '..', '..', outputPath, OUTPUT_FILENAME)
+  var dirPath = path.resolve(__dirname, '..', '..', '..', runOptions.dest)
+  var pagePath = path.resolve(__dirname, '..', '..', '..', runOptions.dest, OUTPUT_FILENAME)
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath)
   }
@@ -87,7 +79,7 @@ const generateFiles = (files) => {
 
   if(files.length) {
 
-    //ignore folder with single .md file
+    //ignore folder with single .md file. what we should do with that?
     files = files.filter(function(fileObject){
       return !(path.basename(fileObject.file).split('.')[1] === 'md');
     });
@@ -107,10 +99,10 @@ const generateFiles = (files) => {
   }
 }
 const modifyComponentsTree = (list) => {
-  let filtered = list.filter((x) => {
-    if(x.comp._isWrapper) return false;
-    return true;
-  })
+  let filtered = list;
+  if(!runOptions.showall){
+     filtered = list.filter((x) => !x.comp._isWrapper)
+  }
   return filtered;
 }
 
@@ -130,11 +122,14 @@ const addInlinedCSS = (cssPath) => {
 }
 
 const processSingleFiles = (fileObject) => {
+  if(runOptions.verbose) logResult(runOptionsi18n.console_processing, fileObject.file);
   return readComponent(fileObject);
 }
 const processWithReadmeFiles = (fileObject) => {
+  if(runOptions.verbose) logResult(runOptionsi18n.console_processing, fileObject.file);
+
   const readmeContent = readMDfile(fileObject.readme);
-  return   readComponent(fileObject, readmeContent);
+  return readComponent(fileObject, readmeContent);
 }
 const isSimpleWrapperComponent = (obj) => {
   if(!obj.methods.length && !obj.props.length && !obj.computed.length) return true;
@@ -173,7 +168,7 @@ const readMDfile = (loadFile) => {
 }
 
 const logResult = (text, suffix) => {
-  console.log(text + suffix)
+  console.log(text + (suffix ? suffix : ''))
 }
 const logError = (text) => {
   console.log(text)

@@ -20,10 +20,12 @@ Target is to have some tool with at least some of the [React version](https://gi
 
 #### CLI options
 
- - src : String, source dir; __default: 'src'__;
- - dest : String, destination output dir; __default: 'components-preview'__;
- - exclude : RegExp, file mask to exclude; __default: '/^\./'__;
- - locale : String; __default: 'en'__;
+ - src : String; source dir __default: 'src'__;
+ - dest : String; destination output dir __default: 'components-preview'__;
+ - exclude : RegExp; file mask to exclude __default: '/^\./'__;
+ - locale : String; output locale __default: 'en'__;
+ - verbose : String; output all details while processing  __default: 'false'__;
+ - all : String; do not ignore any components  __default: 'false'__;
 
  E.g.: ```node ./node_modules/vue-styleguide-generator/ --src components --dest preview``` will read components from PROJECT_ROOT/components folder and provide a html page into PROJECT_ROOT/preview folder
 
