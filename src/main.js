@@ -1,5 +1,5 @@
 var path = require('path');
-var walker = require('./walker');
+var generator = require('./generator');
 
 const getLocaleFile = (localeValue) => {
   const localeFileName = localeValue + '.json'
@@ -10,7 +10,7 @@ const mainMethod = (callOptions) => {
   const options  = Object.assign({}, callOptions, {
     i18n: getLocaleFile(callOptions.locale)
   })
-  walker.iterateComponentsFolder(options.src, options.dest, options);
+  generator.iterateComponentsFolder(options.src, options.dest, options);
 }
 
 module.exports = {

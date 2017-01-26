@@ -1,7 +1,7 @@
 doctype html
 html
   include partials/header.pug
-  body
+  body.component-lib
     include partials/head.pug
     .mdl-layout.mdl-js-layout.mdl-layout--fixed-drawer
       div(class="mdl-layout__drawer")
@@ -15,3 +15,5 @@ html
           .demo-content.mdl-color--white.mdl-shadow--4dp.content.mdl-color-text--grey-800
             !=comps
     include partials/footer.pug
+    style(type='text/css')
+      !=inlineCss

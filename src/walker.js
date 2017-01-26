@@ -1,149 +1,73 @@
 var path = require('path')
 var fs = require('fs')
-var nodedir = require('node-dir');
-var markdown = require( "markdown" ).markdown;
+var dir = require('node-dir');
 var Q = require('Q');
 
-
-var fileProcessor = require('./processor');
-var drawer = require('./drawer');
-var utils = require('./utils');
-
-const COMPONENTS_FOLDER = 'example-components'
-const OUTPUT_FOLDER = 'collection-preview'
-const OUTPUT_FILENAME = 'index.html'
-
-let outputPath;
 let runOptions;
-let componentTree = [];
+let allReadFiles = [];
+let allCallbacks = [];
 
-module.exports = {
-  iterateComponentsFolder : (folderFromName, folderToName, options) => {
+const recursivelyIterateComponentsFolder = (folderFromName) => {
+  var dfd = Q.defer();
+  allCallbacks.push(dfd.promise);
 
-    // nodedir.subdirs(folderFromName, function(err, subdirs) {
-    //     if (err) throw err;
-    //     console.log(subdirs);
-    // });
-    //
-    // 1) root flat files -> push, readFilesStream( dir, [options], streamCallback, [finishedCallback] ) NO RECURSIVE
-    // 2) subdirs -> list, for list
-    // 3) flat files -> push, readFilesStream
+  getSubDirsList(folderFromName).then(function(subdirs){
+    if(subdirs.length) {
+      subdirs.forEach(function(dir){
+        recursivelyIterateComponentsFolder(dir)
+      })
+    }
+  });
 
-    setVariables(folderFromName, folderToName, options);
+  readFlatFiles(folderFromName).then(function(files){
+      allReadFiles.push(files);
+      dfd.resolve(files)
+  });
+}
 
-    nodedir.readFiles(folderFromName, {
-      match: /.vue$/, //|.md
+const getSubDirsList = (dirPath, callback) =>{
+  var dfd = Q.defer();
+
+  dir.subdirs(dirPath, function(err, subdirs){
+    if (err) throw err;
+    dfd.resolve(subdirs);
+  })
+  return dfd.promise;
+}
+const readFlatFiles = (dirPath) => {
+  var dfd = Q.defer();
+
+  dir.readFiles(dirPath, {
+      match: /.vue$|.md/,
       exclude: (runOptions.exclude || /^\./),
       excludeDir: runOptions.excludeDir,
       matchDir:runOptions.matchDir,
-      },
-      intermediateCheck,
-      generateFiles);
-  }
-}
-const setVariables = (folderFromName, folderToName, options) => {
-  runOptions = options;
-  folderFromName = folderFromName || COMPONENTS_FOLDER;
-  outputPath = folderToName || OUTPUT_FOLDER;
-}
-const intermediateCheck = (err, content, next) => {
-  next();
-}
+      recursive: false
+    }, function(err, content, next) {
+        next();
+    },
+    function(err, files){
+        if (err) throw err;
 
-const generateFullPage = (treeArray) => {
-
-  let links = drawer.generateLinkList(treeArray.map((x) => x.link))
-  let comps = treeArray.map((x) => drawer.generateComponentDescription(x.comp))
-
-
-  let data = {
-    links,
-    comps
-  }
-  /*
-  * assumption, script path: PROJECT_ROOT/node_modules/vue-styleguide-generator/
-  * assumption, output assumption PROJECT_ROOT/<outputPath>
-  */
-  var dirPath = path.resolve(__dirname, '..', '..', '..', outputPath)
-  var pagePath = path.resolve(__dirname, '..', '..', '..', outputPath, OUTPUT_FILENAME)
-  if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath)
-  }
-  fs.writeFileSync(pagePath, drawer.generatePage(data))
-}
-const generateFiles = (err, files) => {
-  if (err) throw err;
-
-  if(files.length) {
-    items = files.map(function(file){
-      return {
-          comp: processFileByType(file),
-          link: file
-      };
+        dfd.resolve({
+          dirPath,
+          files
+        });
     });
-
-    generateFullPage(modifyComponentsTree(items));
-
-    logResult(files.length, runOptions.i18n.console_processed);
-  } else {
-    logError(runOptions.i18n.console_no_files_found);
-  }
+    return dfd.promise;
 }
-const modifyComponentsTree = (list) => {
-  let filtered = list.filter((x) => !x.comp._isWrapper)
-  return filtered;
+const mainIterator = (folderFromName, optionsObj, callback) => {
+    runOptions = optionsObj;
+
+    recursivelyIterateComponentsFolder(folderFromName);
+
+    Q.allSettled(allCallbacks).then(function(){
+      callback(allReadFiles);
+    }).catch(function (error) {
+      console.log('Smth went wrong.', error);
+      callback(allReadFiles);
+    });
 }
-
-const getFile = (filename) => {
-  return path.resolve(componentsFolder, filename);
-}
-
-const processFileByType = (file) => {
-  var ext = file.split('.')[1];
-  if(ext === 'md'){
-    return readMDfile(file)
-  } else {
-    return readComponent(file)
-  }
-}
-const isSimpleWrapperComponent = (obj) => {
-  if(!obj.methods.length && !obj.props.length && !obj.computed.length) return true;
-  return false;
-}
-
-const readComponent = (loadFile) => {
-  let vueFile = fs.readFileSync(loadFile, {encoding: 'utf-8'})
-
-  let componentObject = fileProcessor.processComponent(vueFile);
-  let componentCode = utils.componentCodeFromName(componentObject);
-
-  let data = {
-    _isWrapper: false,
-    itemTitle: componentObject.name || path.basename(loadFile).split('.')[0],
-    fileName: loadFile,
-    compInitialData : (componentObject.data ? componentObject.data() : ''),
-    computed: utils.showIfAny(componentObject.computed),
-    props: utils.showIfAny(componentObject.props),
-    methods: utils.showIfAny(componentObject.methods),
-    componentCode,
-    htmlBlockId: path.basename(loadFile).split('.')[0]
-  };
-
-  if(isSimpleWrapperComponent(data)){
-    data._isWrapper = true;
-  }
-
-  return data;
-}
-
-const readMDfile = (loadFile) => {
-  let mdFile = fs.readFileSync(loadFile, {encoding: 'utf-8'});
-  return markdown.toHTML(mdFile);
-}
-
-const logResult = (text, suffix) => {
-  console.log(text + suffix)
-}
-const logError = (text) => {
-  console.log(text)
-}
+module.exports = {
+  walk : mainIterator
+};

@@ -1,0 +1,178 @@
+var path = require('path')
+var fs = require('fs')
+var markdown = require( "markdown" ).markdown;
+var Q = require('Q');
+var css = require('css');
+
+var fileProcessor = require('./processor');
+var drawer = require('./drawer');
+var utils = require('./utils');
+var walker = require('./walker');
+
+const COMPONENTS_FOLDER = 'example-components'
+const OUTPUT_FOLDER = 'collection-preview'
+const OUTPUT_FILENAME = 'index.html'
+const CUSTOM_CSS = 'style/custom-styles.css';
+
+let outputPath;
+let runOptions;
+
+module.exports = {
+  iterateComponentsFolder : (folderFromName, folderToName, options) => {
+
+    setVariables(folderFromName, folderToName, options);
+
+    walker.walk(folderFromName, runOptions, function(result){
+      sortOutResultingList(result);
+    })
+  }
+}
+const sortOutResultingList = (list) => {
+  var nonEmpty = list.filter((x) => x.files.length);
+  let flatFileList = [];
+
+  nonEmpty.forEach(function(elem){
+
+      if(elem.files.length === 1){
+          flatFileList.push({file: elem.files[0]});
+      } else if(elem.files.length === 2){ // && fileNamesAreComplimentary(elem.files)
+        flatFileList = flatFileList.concat({
+          file: elem.files[0],
+          readme: elem.files[1]
+        });
+      } else {
+        flatFileList = flatFileList.concat(elem.files.map((f) => {
+          return {file: f}
+      }));
+      }
+  });
+  console.log(flatFileList);
+  generateFiles(flatFileList);
+}
+
+const fileNamesAreComplimentary = (filesArray) => {
+  const f1 = path.basename(filesArray[0]);
+  const f2 = path.basename(filesArray[1]);
+  if((f1.split('.')[0] == f2.split('.')[0]) && (f1.split('.')[1] != f2.split('.')[1])) return true;
+  return false;
+}
+
+const setVariables = (folderFromName, folderToName, options) => {
+  runOptions = options;
+  folderFromName = folderFromName || COMPONENTS_FOLDER;
+  outputPath = folderToName || OUTPUT_FOLDER;
+}
+
+const generateFullPage = (treeArray) => {
+
+  let links = drawer.generateLinkList(treeArray.map((x) => x.link))
+  let comps = treeArray.map((x) => drawer.generateComponentDescription(x.comp))
+
+  let data = {
+    links,
+    comps,
+    inlineCss : addInlinedCSS(CUSTOM_CSS)
+  }
+  /*
+  * assumption, script path: PROJECT_ROOT/node_modules/vue-styleguide-generator/
+  * assumption, output assumption PROJECT_ROOT/<outputPath>
+  */
+  var dirPath = path.resolve(__dirname, '..', '..', '..', outputPath)
+  var pagePath = path.resolve(__dirname, '..', OUTPUT_FILENAME)//path.resolve(__dirname, '..', '..', '..', outputPath, OUTPUT_FILENAME)
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath)
+  }
+  fs.writeFileSync(pagePath, drawer.generatePage(data))
+}
+const generateFiles = (files) => {
+
+  if(files.length) {
+
+    items = files.map(function(fileItem){
+        return {
+            comp: fileItem.readme ? processWithReadmeFiles(fileItem) : processSingleFiles(fileItem),
+            link: fileItem.file
+        };
+    });
+
+    generateFullPage(modifyComponentsTree(items));
+
+    logResult(files.length, runOptions.i18n.console_processed);
+  } else {
+    logError(runOptions.i18n.console_no_files_found);
+  }
+}
+const modifyComponentsTree = (list) => {
+  let filtered = list.filter((x) => !x.comp._isWrapper)
+  return filtered;
+}
+
+const getFile = (filename) => {
+  return path.resolve(componentsFolder, filename);
+}
+
+const addInlinedCSS = (cssPath) => {
+  const cssfilePath = path.resolve(cssPath);
+  const cssFile = fs.readFileSync(cssfilePath, { encoding: "utf8" });
+  const obj = css.parse(cssFile, {});
+
+  return css.stringify(obj, {
+    inputSourcemaps: false,
+    compress: true
+  });
+}
+
+const processSingleFiles = (fileObject) => {
+  if(path.basename(fileObject.file).split('.')[1] === 'md') return; //folder with single .md file
+  return readComponent(fileObject);
+}
+const processWithReadmeFiles = (fileObject) => {
+  console.log('processWithReadmeFiles', fileObject);
+  // var ext = file.split('.')[1];
+  // if(ext === 'md'){
+  //   return readMDfile(file)
+  // } else {
+  //
+  // }
+}
+const isSimpleWrapperComponent = (obj) => {
+  if(!obj.methods.length && !obj.props.length && !obj.computed.length) return true;
+  return false;
+}
+
+const readComponent = (fileObject) => {
+  const loadFile = fileObject.file;
+  let vueFile = fs.readFileSync(loadFile, {encoding: 'utf-8'})
+  let componentObject = fileProcessor.processComponent(vueFile);
+  let componentCode = utils.componentCodeFromName(componentObject);
+
+  let data = {
+    _isWrapper: false,
+    itemTitle: componentObject.name || path.basename(loadFile).split('.')[0],
+    fileName: loadFile,
+    compInitialData : (componentObject.data ? componentObject.data() : ''),
+    computed: utils.showIfAny(componentObject.computed),
+    props: utils.showIfAny(componentObject.props),
+    methods: utils.showIfAny(componentObject.methods),
+    componentCode,
+    htmlBlockId: path.basename(loadFile).split('.')[0]
+  };
+
+  if(isSimpleWrapperComponent(data)){
+    data._isWrapper = true;
+  }
+
+  return data;
+}
+
+const readMDfile = (loadFile) => {
+  let mdFile = fs.readFileSync(loadFile, {encoding: 'utf-8'});
+  return markdown.toHTML(mdFile);
+}
+
+const logResult = (text, suffix) => {
+  console.log(text + suffix)
+}
+const logError = (text) => {
+  console.log(text)
+}
