@@ -1,4 +1,4 @@
-## Vue js components style guide generator
+# Vue js components style guide generator
 
 Initially started after reading [this vue.js feature request](https://github.com/vuejs/vue-requests/issues/17).
 Now only basic proof of concept is available which can load folder with .vue files, parse it and extract basic props of it.
@@ -7,7 +7,7 @@ Target is to have some tool with at least some of the [React version](https://gi
 
 **EARLY ALPHA MODE NOTICE!**
 
-### Setup
+## Setup
 
  An NPM version available:
 
@@ -16,7 +16,7 @@ Target is to have some tool with at least some of the [React version](https://gi
  - You can also manually (or using Gulp/Grunt) run ```node ./node_modules/vue-styleguide-generator/```
 
 
-### Usage
+## Usage
 
 #### CLI options
 
@@ -27,7 +27,7 @@ Target is to have some tool with at least some of the [React version](https://gi
 
  E.g.: ```node ./node_modules/vue-styleguide-generator/ --src components --dest preview``` will read components from PROJECT_ROOT/components folder and provide a html page into PROJECT_ROOT/preview folder
 
-#### Who the components are iterated (Why I don't see it in the list ?!)
+#### How the components are iterated (Why I don't see it in the list ?!)
 
  If you want to see more information about the component - add a .md file in the same directory.
  While retrieving the files the following assumptions are made:
@@ -45,7 +45,6 @@ Target is to have some tool with at least some of the [React version](https://gi
 
 ### Todos
 
-- testing and cleanup
 - core: move the demo-page to use Vue so that components can be generated from its declaration
 - ui: search in list of components
 - ui: output extra component parameters (computable, data)
