@@ -1,7 +1,7 @@
 var libGenerator = require('./src/main');
 var argv = require('minimist')(process.argv.slice(2));
 
-const DEFAULT_SOURCE_DIR = 'src-test';
+const DEFAULT_SOURCE_DIR = 'src';
 const DEFAULT_DIST_DIR = 'components-preview';
 const DEFAULT_LOCALE = 'en';
 

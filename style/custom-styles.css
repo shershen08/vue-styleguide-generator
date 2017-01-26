@@ -7,6 +7,10 @@
 .component-lib  h3 {
   color: #42b983;
 }
+section.readme-text {
+  padding-left: 20px;
+  border-left: 9px solid #eee;
+}
 
 /* elements */
 .component-lib  .mdl-layout__drawer .mdl-navigation .mdl-navigation__link:hover {

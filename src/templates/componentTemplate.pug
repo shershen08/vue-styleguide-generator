@@ -13,16 +13,11 @@ section(id=htmlBlockId)
     ul
       each val in methods
         li= val
-  //Methods
-  if methods.length
-    h4 Methods
-    ul
-      each val in methods
-        li= val
   //Usage
   h4 Usage
   code= componentCode
-  //Rendered
-  //h4 Rendered view
-  //.result-wrapper
-  //!=renderedHtml
+  //Readme
+  if readmeHTML
+    h4 Readme
+    section(class="readme-text")
+      !=readmeHTML

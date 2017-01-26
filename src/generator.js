@@ -46,7 +46,6 @@ const sortOutResultingList = (list) => {
       }));
       }
   });
-  console.log(flatFileList);
   generateFiles(flatFileList);
 }
 
@@ -78,7 +77,7 @@ const generateFullPage = (treeArray) => {
   * assumption, output assumption PROJECT_ROOT/<outputPath>
   */
   var dirPath = path.resolve(__dirname, '..', '..', '..', outputPath)
-  var pagePath = path.resolve(__dirname, '..', OUTPUT_FILENAME)//path.resolve(__dirname, '..', '..', '..', outputPath, OUTPUT_FILENAME)
+  var pagePath = path.resolve(__dirname, '..', '..', '..', outputPath, OUTPUT_FILENAME)
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath)
   }
@@ -87,6 +86,11 @@ const generateFullPage = (treeArray) => {
 const generateFiles = (files) => {
 
   if(files.length) {
+
+    //ignore folder with single .md file
+    files = files.filter(function(fileObject){
+      return !(path.basename(fileObject.file).split('.')[1] === 'md');
+    });
 
     items = files.map(function(fileItem){
         return {
@@ -103,7 +107,10 @@ const generateFiles = (files) => {
   }
 }
 const modifyComponentsTree = (list) => {
-  let filtered = list.filter((x) => !x.comp._isWrapper)
+  let filtered = list.filter((x) => {
+    if(x.comp._isWrapper) return false;
+    return true;
+  })
   return filtered;
 }
 
@@ -123,24 +130,18 @@ const addInlinedCSS = (cssPath) => {
 }
 
 const processSingleFiles = (fileObject) => {
-  if(path.basename(fileObject.file).split('.')[1] === 'md') return; //folder with single .md file
   return readComponent(fileObject);
 }
 const processWithReadmeFiles = (fileObject) => {
-  console.log('processWithReadmeFiles', fileObject);
-  // var ext = file.split('.')[1];
-  // if(ext === 'md'){
-  //   return readMDfile(file)
-  // } else {
-  //
-  // }
+  const readmeContent = readMDfile(fileObject.readme);
+  return   readComponent(fileObject, readmeContent);
 }
 const isSimpleWrapperComponent = (obj) => {
   if(!obj.methods.length && !obj.props.length && !obj.computed.length) return true;
   return false;
 }
 
-const readComponent = (fileObject) => {
+const readComponent = (fileObject, readmeHTML) => {
   const loadFile = fileObject.file;
   let vueFile = fs.readFileSync(loadFile, {encoding: 'utf-8'})
   let componentObject = fileProcessor.processComponent(vueFile);
@@ -155,7 +156,8 @@ const readComponent = (fileObject) => {
     props: utils.showIfAny(componentObject.props),
     methods: utils.showIfAny(componentObject.methods),
     componentCode,
-    htmlBlockId: path.basename(loadFile).split('.')[0]
+    htmlBlockId: path.basename(loadFile).split('.')[0],
+    readmeHTML: readmeHTML ? readmeHTML : ''
   };
 
   if(isSimpleWrapperComponent(data)){
