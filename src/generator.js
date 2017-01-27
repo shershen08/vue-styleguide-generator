@@ -17,6 +17,7 @@ let runOptions
 module.exports = {
   iterateComponentsFolder: (options) => {
     runOptions = options
+
     walker.walk(options.src, runOptions, function (result) {
       sortOutResultingList(result)
     })
