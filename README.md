@@ -25,8 +25,8 @@ Target is to have some tool with at least some of the [React version](https://gi
 | dest | String|Destination output dir| components-preview|
 |exclude| RegExp|File mask to exclude |/^\./|
 |locale|String|Output locale|en|
- |verbose|String|Output all details while processing|false|
- |all|String|Do not ignore any components| false|
+|verbose| String|Output all details while processing| false|
+|all| String|Do not ignore any components| false|
 
  E.g.: ```node ./node_modules/vue-styleguide-generator/ --src components --dest preview``` will read components from PROJECT_ROOT/components folder and provide a html page into PROJECT_ROOT/preview folder
 
