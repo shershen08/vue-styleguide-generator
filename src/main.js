@@ -1,18 +1,18 @@
-var path = require('path');
-var generator = require('./generator');
+var path = require('path')
+var generator = require('./generator')
 
 const getLocaleFile = (localeValue) => {
   const localeFileName = localeValue + '.json'
-  return require(path.resolve(__dirname, '..', 'i18n', localeFileName));
+  return require(path.resolve(__dirname, '..', 'i18n', localeFileName))
 }
 
 const mainMethod = (callOptions) => {
-  const options  = Object.assign({}, callOptions, {
+  const options = Object.assign({}, callOptions, {
     i18n: getLocaleFile(callOptions.locale)
   })
-  generator.iterateComponentsFolder(options.src, options.dest, options);
+  generator.iterateComponentsFolder(options)
 }
 
 module.exports = {
-  run : mainMethod
+  run: mainMethod
 }
