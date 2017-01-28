@@ -1,4 +1,4 @@
-# Vue js components style guide generator
+# Vue js components styleguide generator
 
 > Initially started after reading [this vue.js feature request](https://github.com/vuejs/vue-requests/issues/17).
 Now only basic proof of concept is available which can load folder with .vue files, parse it and extract basic props of it.
@@ -16,6 +16,8 @@ Target is to have some tool with at least some of the [React version](https://gi
   You can also manually (or using Gulp/Grunt) run ```node ./node_modules/vue-styleguide-generator/```
 
 ## Usage
+
+Works only for Vue 2.x projects.
 
 #### CLI options
 
@@ -63,5 +65,5 @@ Especially on following:
  - extra features
 
 ### Bugs and problems
-
+-  window object [may not be patched fully](https://github.com/shershen08/vue-styleguide-generator/blob/master/src/processor.js#L29) so components code execution may fail
 - 'vue-template-compiler' must be the same as the version of 'vue' you're using in your codebase. Now set to 2.1.10. may have to manually put to other version that's used in your project.
