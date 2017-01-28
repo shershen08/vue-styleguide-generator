@@ -1,4 +1,4 @@
-section(id=htmlBlockId)
+section(id=htmlBlockId,class="component")
   div(class="demo-crumbs mdl-color-text--grey-500")= fileName
   h3= itemTitle
   //Properties
@@ -14,8 +14,9 @@ section(id=htmlBlockId)
       each val in methods
         li= val
   //Usage
-  h4 Usage
-  code= componentCode
+  if componentCode
+    h4 Usage
+    code= componentCode
   //Readme
   if readmeHTML
     h4 Readme

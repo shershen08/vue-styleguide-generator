@@ -2,12 +2,11 @@ doctype html
 html
   include partials/header.pug
   body.component-lib
-    include partials/head.pug
     .mdl-layout.mdl-js-layout.mdl-layout--fixed-drawer
-      div(class="mdl-layout__drawer")
+      div(class="mdl-layout__drawer",id="plugin-list")
         form
           .mdl-textfield.mdl-js-textfield.search-area
-            input(class="mdl-textfield__input js-component-search",type="text",placeholder="Search...")
+            input(class="mdl-textfield__input js-component-search search",type="text",placeholder="Search...")
         span(class="mdl-layout-title") Collection
         !=links
       main(class="mdl-layout__content")
@@ -17,3 +16,8 @@ html
     include partials/footer.pug
     style(type='text/css')
       !=inlineCss
+    script.
+      document.addEventListener("DOMContentLoaded", function(event) {
+        var options = {valueNames: ['name']};
+        var pluginList = new List('plugin-list', options);
+      });

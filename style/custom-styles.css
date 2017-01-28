@@ -11,12 +11,22 @@ section.readme-text {
   padding-left: 20px;
   border-left: 9px solid #eee;
 }
-
+section.component {
+  margin-bottom: 50px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+}
 /* elements */
 .component-lib  .mdl-layout__drawer .mdl-navigation .mdl-navigation__link:hover {
   background: #a8eacc;
 }
-
+ul.list {
+  margin: 0;
+  padding: 0;
+}
+ul.list li {
+  list-style-type: none;
+}
 .component-lib .search-area input {
   margin: 10px 0px 0px 20px;
 }

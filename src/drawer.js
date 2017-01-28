@@ -10,6 +10,7 @@ let pageTemplate;
 module.exports = {
   generatePage: function (data) {
     let pageTemplatePath = path.resolve(__dirname, TEMPLATES_FOLDER, 'pageTemplate.pug')
+    data.comps = data.comps.join('');
     return pug.renderFile(pageTemplatePath, data)
   },
   generateLinkList: function (componentArray) {

@@ -26,17 +26,26 @@ const getComponentModuleJSCode = (file) => {
 }
 
 const evalComponentCode = (code) => {
-  const sandbox = {
-    exports: {},
-    require: function () {},
-    window: {},
-    console: {
-      log: function () {}
-    }
-  }
   const script = new vm.Script(code, {})
   const context = new vm.createContext(sandbox)
   script.runInContext(context)
   const runResults = util.inspect(sandbox)
   return sandbox.exports.default
+}
+const sandbox = {
+  exports: {},
+  require: function () {},
+  window: {
+    location: {}
+  },
+  alert: function () {},
+  confirm: function () {},
+  console: {
+    log: function () {}
+  },
+  localStorage: {
+    getItem: function () {},
+    setItem: function () {},
+    removeItem: function () {}
+  }
 }
