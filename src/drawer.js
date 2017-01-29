@@ -1,16 +1,54 @@
 const pug = require('pug')
 var path = require('path')
+var utils = require('./utils')
 
 const TEMPLATES_FOLDER = 'templates'
 const TEMPLATES_PARTIALS_FOLDER = 'partials'
 
-let componentTemplate;
-let pageTemplate;
+let componentTemplate
+let pageTemplate
 
 module.exports = {
+  generatePropsDetails: function (propsArray) {
+    if (!propsArray) return []
+    let tableListArray = []
+
+    if (propsArray.length) {
+      return propsArray.map((p) => {
+        return {name: p,required: '',default: '',type: ''}
+      })
+    }
+    Object.keys(propsArray).forEach(function (prop) {
+      let val = propsArray[prop]
+      let res = {
+        name: prop,
+        required: '',
+        default: '',
+        type: ''
+      }
+
+      if (typeof val === 'object') {
+        if (val.required) res.required = val.required.toString()
+        if (val.default) res.default = val.default
+        if (val.type) {
+          res.default = val.type.toString().split('()')[0].split(' ')[1]
+        }
+      }
+      tableListArray.push(res)
+    })
+    return tableListArray
+  },
+  generateUsageCode: function (comp, file) {
+    let templatePart = utils.componentCodeFromName(comp)
+    let importPart = generateImportStatement(comp, file)
+
+    return `${importPart}
+            
+${templatePart}`
+  },
   generatePage: function (data) {
     let pageTemplatePath = path.resolve(__dirname, TEMPLATES_FOLDER, 'pageTemplate.pug')
-    data.comps = data.comps.join('');
+    data.comps = data.comps.join('')
     return pug.renderFile(pageTemplatePath, data)
   },
   generateLinkList: function (componentArray) {
@@ -33,4 +71,19 @@ module.exports = {
 
   // todos: data, ?dependances, child elements from 'components' obj
   }
+}
+const generateImportStatement = (comp, file) => {
+  let conventionalComponentName
+
+  if (comp.name) {
+    conventionalComponentName = utils.snakeToCamel(comp.name)
+  } else {
+    if (file.indexOf('-')) {
+      conventionalComponentName = utils.snakeToCamel(file)
+    } else {
+      conventionalComponentName = file
+    }
+  }
+
+  return `import \{${utils.capitalizeFirstLetter(conventionalComponentName)}\} from '${file}';`
 }

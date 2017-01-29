@@ -138,16 +138,17 @@ const readComponent = (fileObject, readmeHTML) => {
   let vueFile = fs.readFileSync(loadFile, {encoding: 'utf-8'})
   let componentObject = fileProcessor.processComponent(vueFile)
   let componentCode = utils.componentCodeFromName(componentObject)
+  let prettyName = componentObject.name || path.basename(loadFile).split('.')[0]
 
   let data = {
     _isWrapper: false,
-    itemTitle: componentObject.name || path.basename(loadFile).split('.')[0],
+    itemTitle: prettyName,
     fileName: loadFile,
     compInitialData: (componentObject.data ? componentObject.data() : ''),
     computed: utils.showIfAny(componentObject.computed),
-    props: utils.showIfAny(componentObject.props),
+    props: drawer.generatePropsDetails(componentObject.props),
     methods: utils.showIfAny(componentObject.methods),
-    componentCode,
+    componentCode: drawer.generateUsageCode(componentObject, prettyName),
     htmlBlockId: path.basename(loadFile).split('.')[0],
     readmeHTML: readmeHTML ? readmeHTML : ''
   }
