@@ -5,13 +5,13 @@ Now only basic proof of concept is available which can load folder with .vue fil
 
 Target is to have some tool with at least some of the [React version](https://github.com/styleguidist/react-styleguidist) capabilities.
 
-**ALPHA MODE NOTICE!**
+**Generate single html file containing all components listed with details and search out from your .vue project files.**
 
 ## Setup
 
   1. ```npm install vue-styleguide-generator --save-dev```
 
-  2. add to you package.json in script section - ```"build-components": "node ./node_modules/vue-styleguide-generator/"``` then run ```npm run build-components```
+  2. add to you package.json in script section - for example like this ```"build-components": "node ./node_modules/vue-styleguide-generator/"``` and then run ```npm run build-components``` from the root folder of the project.
 
   You can also manually (or using Gulp/Grunt) run ```node ./node_modules/vue-styleguide-generator/```
 
@@ -21,14 +21,14 @@ Works only for Vue 2.x projects.
 
 #### CLI options
 
-| Name | type | default | description |
+| Name | Type | Default | Description |
 | ---: | ---- |  ------ |------------ |
-| src  | String|Source dir|src|
-| dest | String|Destination output dir| components-preview|
-|exclude| RegExp|File mask to exclude |/^\./|
-|locale|String|Output locale|en|
-|verbose| String|Output all details while processing| false|
-|all| String|Do not ignore any components| false|
+| --src  | String|Source dir, will be recursively scanned|src|
+| --dest | String|Destination output dir, file index.html will be placed there| components-preview|
+| --exclude| RegExp|File mask to exclude certain type of files|/^\./|
+| --locale|String|Output locale language|en|
+| --verbose| String|Output all details while processing| false|
+| --all| String|Do not ignore any components| false|
 
  E.g.: ```node ./node_modules/vue-styleguide-generator/ --src components --dest preview``` will read components from PROJECT_ROOT/components folder and provide a html page into PROJECT_ROOT/preview folder
 
@@ -53,17 +53,16 @@ Works only for Vue 2.x projects.
 
 - core: add tests
 - core: move the demo-page to use Vue so that components can be generated from its declaration
-- core: parse props with validation
-- ui: search in list of components
 - ui: output extra component parameters (computable, data)
 - various use cases testing
 
 #### Contributions are welcome!
 
 Especially on following:
- - translations
+ - [translations](https://github.com/shershen08/vue-styleguide-generator/tree/master/i18n)
  - extra features
+ - implementing SSR
 
 ### Bugs and problems
--  window object [may not be patched fully](https://github.com/shershen08/vue-styleguide-generator/blob/master/src/processor.js#L29) so components code execution may fail
+-  window object [may not be patched fully](https://github.com/shershen08/vue-styleguide-generator/blob/master/src/processor.js#L29) so some component's code execution may fail
 - 'vue-template-compiler' must be the same as the version of 'vue' you're using in your codebase. Now set to 2.1.10. may have to manually put to other version that's used in your project.
