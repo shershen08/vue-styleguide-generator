@@ -1,4 +1,4 @@
-# Vue js components styleguide generator
+# Vue js components styleguide generator 📚
 
 > Initially started after reading [this vue.js feature request](https://github.com/vuejs/vue-requests/issues/17).
 Now only basic proof of concept is available which can load folder with .vue files, parse it and extract basic props of it.
@@ -13,11 +13,11 @@ Target is to have some tool with at least some of the [React version](https://gi
 
   2. add to you package.json in script section - for example like this ```"build-components": "node ./node_modules/vue-styleguide-generator/"``` and then run ```npm run build-components``` from the root folder of the project.
 
-  You can also manually (or using Gulp/Grunt) run ```node ./node_modules/vue-styleguide-generator/```
+  🏃 You can also manually (or using Gulp/Grunt) run ```node ./node_modules/vue-styleguide-generator/```
 
 ## Usage
 
-Works only for Vue 2.x projects.
+✅ Works only for Vue 2.x projects.
 
 #### CLI options
 
@@ -56,7 +56,7 @@ Works only for Vue 2.x projects.
 - ui: output extra component parameters (computable, data)
 - various use cases testing
 
-#### Contributions are welcome!
+#### Contributions are welcome 👍!
 
 Especially on following:
  - [translations](https://github.com/shershen08/vue-styleguide-generator/tree/master/i18n)
