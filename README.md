@@ -5,6 +5,8 @@ Now only basic proof of concept is available which can load folder with .vue fil
 
 Target is to have some tool with at least some of the [React version](https://github.com/styleguidist/react-styleguidist) capabilities.
 
+Idea is to have what [vue-play](https://github.com/vue-play/vue-play) does but in automated way - with one task run, plus READMEs, etc.
+
 **Generate single html file containing all components listed with details and search out from your .vue project files.**
 
 ## Setup
