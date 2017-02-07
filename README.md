@@ -13,7 +13,7 @@ Idea is to have what [vue-play](https://github.com/vue-play/vue-play) does but i
 
 ### Running on large components collections
 
-Installing and running styleguide generator on [vuikit](https://github.com/vuikit/vuikit) repo results in [**DEMO html-file**](https://shershen08.github.io/vue-plugins-demo-static/vuikit-demo-index.html)
+Installing and running styleguide generator on [vuikit](https://github.com/vuikit/vuikit) repo results in [**DEMO html-file**](https://shershen08.github.io/vue-plugins-demo-static/vuikit-demo-index.html). As you can see there are missing parts, but still it's totaly automated and I am working hard to have more consistent output.
 
 ### Output UI demo
  ![resulting output](https://raw.githubusercontent.com/shershen08/vue-styleguide-generator/master/demo-output.jpg)
