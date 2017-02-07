@@ -4,7 +4,7 @@ section(id=htmlBlockId,class="component")
     =fileName
   h3= itemTitle
   //Properties
-  if props.length
+  if props && props.length
     h4 Properties
     table.props-table
       thead
@@ -22,7 +22,7 @@ section(id=htmlBlockId,class="component")
           td= val.type
 
   //Methods
-  if methods.length
+  if methods && methods.length
     h4 Methods
     ul.methods-list
       each val in methods

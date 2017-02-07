@@ -1,3 +1,4 @@
+
 const methods = {
   kebabToCamel: (myString) => {
     return myString.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); })
@@ -19,6 +20,9 @@ const methods = {
   },
   capitalizeFirstLetter: (str) => {
     return str[0].toUpperCase() + str.substr(1)
+  },
+  logParsingError: (error) => {
+     console.log (error);
   }
 }
 module.exports = methods
