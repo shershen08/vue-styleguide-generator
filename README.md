@@ -9,7 +9,17 @@ Idea is to have what [vue-play](https://github.com/vue-play/vue-play) does but i
 
 **Generate single html file containing all components listed with details and search out from your .vue project files.**
 
-## Setup
+## 1. Examples
+
+### Running on large components collections
+
+Installing and running styleguide generator on [vuikit](https://github.com/vuikit/vuikit) repo results in [**DEMO html-file**](https://shershen08.github.io/vue-plugins-demo-static/vuikit-demo-index.html)
+
+### Output UI demo
+ ![resulting output](https://raw.githubusercontent.com/shershen08/vue-styleguide-generator/master/demo-output.jpg)
+
+
+## 2. Setup
 
   1. ```npm install vue-styleguide-generator --save-dev```
 
@@ -17,7 +27,7 @@ Idea is to have what [vue-play](https://github.com/vue-play/vue-play) does but i
 
   🏃 You can also manually (or using Gulp/Grunt) run ```node ./node_modules/vue-styleguide-generator/```
 
-## Usage
+## 3. Usage
 
 ✅ Works only for Vue 2.x projects.
 
@@ -46,10 +56,6 @@ Idea is to have what [vue-play](https://github.com/vue-play/vue-play) does but i
 
 
   Found a bug or have a proposal - please [create an issue](https://github.com/shershen08/vue-styleguide-generator/issueshttps://github.com/shershen08/vue-styleguide-generator/issues) or tweet me [@legkoletat](https://twitter.com/legkoletat)!
-
-### Output UI demo
-
- ![resulting output](https://raw.githubusercontent.com/shershen08/vue-styleguide-generator/master/demo-output.jpg)
 
 ### Todos
 
