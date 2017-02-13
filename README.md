@@ -61,9 +61,10 @@ Idea is to have what [vue-play](https://github.com/vue-play/vue-play) does but i
 ### Todos
 
 - core: add tests
+- align parsing and display with [vue-js-component-style-guide](https://medium.com/tldr-tech/vue-js-component-style-guide-711988d5e94e)
 - core: move the demo-page to use Vue so that components can be generated from its declaration
 - ui: output extra component parameters (computable, data)
-- various use cases testing
+- <s>various use cases testing</s>, added vuikit and Keen-UI links
 
 #### Contributions are welcome 👍!
 
