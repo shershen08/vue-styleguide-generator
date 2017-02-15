@@ -1,10 +1,13 @@
 {
   "console_processed":"",
   "console_error":"",
+  "console_processing": "",
   "html_components_title":"",
   "html_page_title":"",
   "html_component_subtitle_props":"",
   "html_component_subtitle_methods":"",
   "html_component_subtitle_usage":"",
-  "html_component_subtitle_readme":""
+  "html_component_subtitle_readme":"",
+  "html_component_search":"",
+  "html_component_footer":""
 }

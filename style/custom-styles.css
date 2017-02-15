@@ -1,0 +1,72 @@
+.component-lib code {
+  padding: 20px;
+  background: #f8f8f8;
+  width: 90%;
+  display: block;
+}
+.component-lib  h3 {
+  color: #42b983;
+}
+section.readme-text {
+  padding-left: 20px;
+  border-left: 9px solid #eee;
+}
+section.component {
+  margin-bottom: 50px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+}
+.demo-crumbs svg {
+    width: 20px;
+    margin-right: 9px;
+    height: 20px;
+}
+table.props-table {
+  border-collapse: collapse;
+}
+table.props-table thead {
+  background: #ccc;
+}
+.props-table td {
+  padding: 5px 20px;
+}
+ul.methods-list {
+  margin: 0px; padding: 0px;
+}
+ul.methods-list li {
+      list-style-type: none;
+      display: inline-block;
+      margin: 0 10px 0 0;
+}
+code {
+  display: block;
+  white-space: pre-wrap;
+}
+/* elements */
+.component-lib  .mdl-layout__drawer .mdl-navigation .mdl-navigation__link:hover {
+  background: #a8eacc;
+}
+ul.list {
+  margin: 0;
+  padding: 0;
+}
+ul.list li {
+  list-style-type: none;
+}
+.component-lib .search-area input {
+  margin: 10px 0px 0px 20px;
+}
+
+/* footer */
+.component-lib footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: 10000;
+  background: #fff;
+}
+.component-lib  footer p {
+  padding: 10px 0px 10px 20px;
+  margin: 0;
+  color: #ccc;
+}

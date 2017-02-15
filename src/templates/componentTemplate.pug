@@ -1,17 +1,38 @@
-section(id=htmlBlockId)
-  div(class="demo-crumbs mdl-color-text--grey-500")= fileName
+section(id=htmlBlockId,class="component")
+  div(class="demo-crumbs mdl-color-text--grey-500")
+    include icons/folder.svg
+    =fileName
   h3= itemTitle
-  h4 Properties
-  ul
-    each val in props
-      li= val
-  h4 Methods
-  ul
-    each val in methods
-      li= val
-  h4 Usage
-  br
-  code= componentCode
-  br
-  br
-  hr
+  //Properties
+  if props && props.length
+    h4 Properties
+    table.props-table
+      thead
+        tr
+          td Name
+          td Required
+          td Default
+          td Type
+      each val in props
+        tr
+          td
+            strong=val.name
+          td= val.required
+          td= val.default
+          td= val.type
+
+  //Methods
+  if methods && methods.length
+    h4 Methods
+    ul.methods-list
+      each val in methods
+        li= val + ','
+  //Usage
+  if componentCode
+    h4 Usage
+    code= componentCode
+  //Readme
+  if readmeHTML
+    h4 Readme
+    section(class="readme-text")
+      !=readmeHTML

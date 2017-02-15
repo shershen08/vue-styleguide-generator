@@ -1,18 +1,18 @@
-var path = require('path');
-var walker = require('./walker');
+var path = require('path')
+var generator = require('./generator')
 
-const locale = 'en'//todo:use some system var
-const localeFileName = locale + '.json'
+const getLocaleFile = (localeValue) => {
+  const localeFileName = localeValue + '.json'
+  return require(path.resolve(__dirname, '..', 'i18n', localeFileName))
+}
 
-var localeFile = require(path.resolve('i18n', localeFileName));
-
-const mainMethod = (from, to, callOptions) => {
-  const options  = Object.assign({}, callOptions, {
-    i18n: localeFile
+const mainMethod = (callOptions) => {
+  const options = Object.assign({}, callOptions, {
+    i18n: getLocaleFile(callOptions.locale)
   })
-  walker.iterateComponentsFolder(from, to, options);
+  generator.iterateComponentsFolder(options)
 }
 
 module.exports = {
-  run : mainMethod
+  run: mainMethod
 }

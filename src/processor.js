@@ -1,41 +1,62 @@
-var parse = require('./../lib/parser')
-var babel = require('babel-core')
-const vm = require('vm')
-const util = require('util')
+var parse = require( './parser' )
+var babel = require( 'babel-core' )
+const vm = require( 'vm' )
+const util = require( 'util' )
 
-// export default class Processor
+var utils = require( './utils' )
 
 module.exports = {
-  processComponent : (content) => {
-    const jscode = getComponentModuleJSCode(content)
-    const babelifycode = babelifyCode(jscode)
-    return evalComponentCode(babelifycode.code);
+  processComponent: ( content ) => {
+    const jscode = getComponentModuleJSCode( content )
+    if ( !jscode ) return;
+    const babelifycode = babelifyCode( jscode )
+    return evalComponentCode( babelifycode.code )
   }
 }
 
-const babelifyCode = (code) => {
+const babelifyCode = ( code ) => {
   const options = {
     ast: false,
     comments: false,
-    presets: ['es2015']
+    presets: [ 'es2015' ]
   }
-  return babel.transform(code, options);
+  return babel.transform( code, options )
 }
-const getComponentModuleJSCode = (file) => {
-  var parts = parse(file, 'name', false)
-  return parts.script.content;
+const getComponentModuleJSCode = ( file ) => {
+  var parts = parse( file, 'name', false )
+  return parts.script ? parts.script.content : '';
 }
 
-const evalComponentCode = (code) => {
-  const sandbox = {
-    exports: {},
-    require : function(){
-      
-    }
+const evalComponentCode = ( code ) => {
+  const script = new vm.Script( code, {})
+  const context = new vm.createContext( sandbox )
+  try {
+    script.runInContext( context )
+    const runResults = util.inspect( sandbox )
+    return sandbox.exports.default
   }
-  const script = new vm.Script(code, {})
-  const context = new vm.createContext(sandbox)
-  script.runInContext(context)
-  const runResults = util.inspect(sandbox)
-  return sandbox.exports.default
+  catch ( e ) {
+    //utils.logParsingError( e )
+  }
+}
+const sandbox = {
+  exports: {},
+  require: function () { },
+  window: {
+    location: {}
+  },
+  alert: function () { },
+  confirm: function () { },
+  console: {
+    log: function () { }
+  },
+  localStorage: {
+    getItem: function () { },
+    setItem: function () { },
+    removeItem: function () { }
+  },
+  _moment2: {
+    default: function () { }
+  }
+
 }
