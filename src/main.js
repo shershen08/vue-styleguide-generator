@@ -7,6 +7,7 @@ const getLocaleFile = (localeValue) => {
 }
 
 const mainMethod = (callOptions) => {
+  console.time();
   const options = Object.assign({}, callOptions, {
     i18n: getLocaleFile(callOptions.locale)
   })
