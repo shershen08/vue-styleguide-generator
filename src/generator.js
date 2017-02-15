@@ -11,6 +11,7 @@ var walker = require( './walker' )
 
 const OUTPUT_FILENAME = 'index.html'
 const CUSTOM_CSS = 'style/custom-styles.css'
+let fileReadingList = [];
 
 let runOptions
 
@@ -28,6 +29,8 @@ const sortOutResultingList = ( list ) => {
   let flatFileList = []
 
   nonEmpty.forEach( function ( elem ) {
+
+
     if ( elem.files.length === 1 ) {
       flatFileList.push( { file: elem.files[ 0 ] })
     } else if ( elem.files.length === 2 ) { // && fileNamesAreComplimentary(elem.files)
@@ -40,8 +43,10 @@ const sortOutResultingList = ( list ) => {
         return { file: f }
       }) )
     }
+
+
   })
-  generateFiles( flatFileList )
+    generateFiles( flatFileList )
 }
 
 const fileNamesAreComplimentary = ( filesArray ) => {
@@ -81,16 +86,24 @@ const generateFiles = ( files ) => {
       return !( path.basename( fileObject.file ).split( '.' )[ 1 ] === 'md' )
     })
 
-    items = files.map( function ( fileItem ) {
-      return {
-        comp: fileItem.readme ? processWithReadmeFiles( fileItem ) : processSingleFiles( fileItem ),
-        link: fileItem.file
-      }
+    files.forEach( function ( fileItem ) {
+      fileItem.readme ? processWithReadmeFiles( fileItem ) : processSingleFiles( fileItem )
     })
 
-    generateFullPage( modifyComponentsTree( items ) )
+    Q.allSettled( fileReadingList ).then( function ( results ) {
+      let processedResults = results.map( function ( item ) {
+        return item.value ? {
+          comp: item.value,
+          link: item.value.fileName
+        } : {};
+      })
 
-    logResult( files.length, runOptions.i18n.console_processed )
+      generateFullPage( modifyComponentsTree( processedResults ) )
+      logResult( files.length, runOptions.i18n.console_processed )
+    }).catch(function(err){
+      console.log(err);
+    })
+
   } else {
     utils.logParsingError( runOptions.i18n.console_no_files_found )
   }
@@ -134,23 +147,34 @@ const isSimpleWrapperComponent = ( obj ) => {
 }
 
 const readComponent = ( fileObject, readmeHTML ) => {
+  var dfd = Q.defer()
+  fileReadingList.push( dfd.promise );
+
   const loadFile = fileObject.file
-  let vueFile = fs.readFileSync( loadFile, { encoding: 'utf-8' })
+
+  fs.readFile( loadFile,  { encoding: 'utf-8' }, function read( err, data ) {
+    if ( err ) {
+      throw err;
+    }
+    dfd.resolve( processComponent( data, loadFile, readmeHTML ) );
+  })
+
+}
+const processComponent = ( vueFile, fileName, readmeHTML ) => {
   let componentObject = fileProcessor.processComponent( vueFile )
   if ( componentObject && !isEmpty( componentObject ) ) {
     let componentCode = utils.componentCodeFromName( componentObject )
-    let prettyName = componentObject.name || path.basename( loadFile ).split( '.' )[ 0 ]
-
+    let prettyName = componentObject.name || path.basename( fileName ).split( '.' )[ 0 ]
     let data = {
       _isWrapper: false,
       itemTitle: prettyName,
-      fileName: loadFile,
+      fileName: fileName,
       compInitialData: getComponentData( componentObject ),
       computed: utils.showIfAny( componentObject.computed ),
       props: drawer.generatePropsDetails( componentObject.props ),
       methods: utils.showIfAny( componentObject.methods ),
       componentCode: drawer.generateUsageCode( componentObject, prettyName ),
-      htmlBlockId: path.basename( loadFile ).split( '.' )[ 0 ],
+      htmlBlockId: path.basename( fileName ).split( '.' )[ 0 ],
       readmeHTML: readmeHTML ? readmeHTML : ''
     }
 
@@ -169,7 +193,7 @@ const getComponentData = ( component ) => {
     if ( component.data && typeof component.data === 'function' ) return component.data();
   }
   catch ( e ) {
-    utils.logParsingError( e )
+    // utils.logParsingError( e )
   }
 
 }

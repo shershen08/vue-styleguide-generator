@@ -36,7 +36,7 @@ const evalComponentCode = ( code ) => {
     return sandbox.exports.default
   }
   catch ( e ) {
-    utils.logParsingError( e )
+    //utils.logParsingError( e )
   }
 }
 const sandbox = {
