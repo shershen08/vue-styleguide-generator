@@ -5,3 +5,4 @@ npm-debug.log
 example-components/
 src-test/
 tmp-dev/
+node_modules/
