@@ -30,9 +30,11 @@ section(id=htmlBlockId,class="component")
   //Usage
   if componentCode
     h4 Usage
-    code= componentCode
+    code(class="javascript")= componentCode
   //Readme
   if readmeHTML
     h4 Readme
     section(class="readme-text")
       !=readmeHTML
+
+
