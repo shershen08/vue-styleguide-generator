@@ -1,9 +1,8 @@
 var parse = require( './parser' )
 var babel = require( 'babel-core' )
 const vm = require( 'vm' )
-const util = require( 'util' )
 
-var utils = require( './utils' )
+//var utils = require( './utils' )
 
 module.exports = {
   processComponent: ( content ) => {
@@ -32,7 +31,6 @@ const evalComponentCode = ( code ) => {
   const context = new vm.createContext( sandbox )
   try {
     script.runInContext( context )
-    const runResults = util.inspect( sandbox )
     return sandbox.exports.default
   }
   catch ( e ) {

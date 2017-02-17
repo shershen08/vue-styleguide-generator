@@ -1,8 +1,9 @@
 var path = require( 'path' )
 var fs = require( 'fs' )
 var markdown = require( 'markdown' ).markdown
-var Q = require( 'Q' )
+var Q = require( 'q' )
 var css = require( 'css' )
+var debug = require('debug')('http');
 
 var fileProcessor = require( './processor' )
 var drawer = require( './drawer' )
@@ -33,7 +34,7 @@ const sortOutResultingList = ( list ) => {
 
     if ( elem.files.length === 1 ) {
       flatFileList.push( { file: elem.files[ 0 ] })
-    } else if ( elem.files.length === 2 ) { // && fileNamesAreComplimentary(elem.files)
+    } else if ( elem.files.length === 2 ) { // && utils.fileNamesAreComplimentary(elem.files)
       flatFileList = flatFileList.concat( {
         file: elem.files[ 0 ],
         readme: elem.files[ 1 ]
@@ -47,13 +48,6 @@ const sortOutResultingList = ( list ) => {
 
   })
     generateFiles( flatFileList )
-}
-
-const fileNamesAreComplimentary = ( filesArray ) => {
-  const f1 = path.basename( filesArray[ 0 ] )
-  const f2 = path.basename( filesArray[ 1 ] )
-  if ( ( f1.split( '.' )[ 0 ] == f2.split( '.' )[ 0 ] ) && ( f1.split( '.' )[ 1 ] != f2.split( '.' )[ 1 ] ) ) return true
-  return false
 }
 
 const generateFullPage = ( treeArray ) => {
@@ -101,7 +95,7 @@ const generateFiles = ( files ) => {
       generateFullPage( modifyComponentsTree( processedResults ) )
       logResult( files.length, runOptions.i18n.console_processed )
     }).catch(function(err){
-      console.log(err);
+      debug(err);
     })
 
   } else {
@@ -114,10 +108,6 @@ const modifyComponentsTree = ( list ) => {
     filtered = list.filter(( x ) => x.comp && !x.comp._isWrapper );
   }
   return filtered
-}
-
-const getFile = ( filename ) => {
-  return path.resolve( componentsFolder, filename )
 }
 
 const addInlinedCSS = ( cssPath ) => {
@@ -163,7 +153,6 @@ const readComponent = ( fileObject, readmeHTML ) => {
 const processComponent = ( vueFile, fileName, readmeHTML ) => {
   let componentObject = fileProcessor.processComponent( vueFile )
   if ( componentObject && !isEmpty( componentObject ) ) {
-    let componentCode = utils.componentCodeFromName( componentObject )
     let prettyName = componentObject.name || path.basename( fileName ).split( '.' )[ 0 ]
     let data = {
       _isWrapper: false,
@@ -203,5 +192,5 @@ const readMDfile = ( loadFile ) => {
 }
 
 const logResult = ( text, suffix ) => {
-  console.log( text + ( suffix ? suffix : '' ) )
+  debug( text + ( suffix ? suffix : '' ) )
 }

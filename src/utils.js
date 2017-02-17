@@ -1,3 +1,5 @@
+var debug = require('debug')('http');
+var path = require( 'path' );
 
 const methods = {
   kebabToCamel: (myString) => {
@@ -22,7 +24,13 @@ const methods = {
     return str[0].toUpperCase() + str.substr(1)
   },
   logParsingError: (error) => {
-     console.log (error);
+     debug (error);
+  },
+  fileNamesAreComplimentary : ( filesArray ) => {
+    const f1 = path.basename( filesArray[ 0 ] )
+    const f2 = path.basename( filesArray[ 1 ] )
+    if ( ( f1.split( '.' )[ 0 ] == f2.split( '.' )[ 0 ] ) && ( f1.split( '.' )[ 1 ] != f2.split( '.' )[ 1 ] ) ) return true
+    return false
   }
 }
 module.exports = methods
