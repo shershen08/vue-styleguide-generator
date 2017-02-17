@@ -3,7 +3,7 @@ var fs = require( 'fs' )
 var markdown = require( 'markdown' ).markdown
 var Q = require( 'q' )
 var css = require( 'css' )
-var debug = require('debug')('http');
+var debug = require('debug')('app');
 
 var fileProcessor = require( './processor' )
 var drawer = require( './drawer' )
@@ -190,7 +190,8 @@ const readMDfile = ( loadFile ) => {
   let mdFile = fs.readFileSync( loadFile, { encoding: 'utf-8' })
   return markdown.toHTML( mdFile )
 }
-
+ /* eslint-disable no-console */
 const logResult = ( text, suffix ) => {
-  debug( text + ( suffix ? suffix : '' ) )
+  console.log( text + ( suffix ? suffix : '' ) )
 }
+ /* eslint-enable no-console */

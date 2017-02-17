@@ -1,6 +1,6 @@
 {
   "name": "vue-styleguide-generator",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "description": "Styleguide generator for your Vue.js components",
   "main": "index.js",
   "scripts": {

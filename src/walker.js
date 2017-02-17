@@ -1,6 +1,6 @@
 var dir = require('node-dir')
 var Q = require('q')
-var debug = require('debug')('http');
+var debug = require('debug')('app');
 
 let runOptions
 let folderSearchCallbacks = []
