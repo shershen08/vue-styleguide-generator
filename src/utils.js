@@ -1,4 +1,4 @@
-var debug = require('debug')('http');
+var debug = require('debug')('app');
 var path = require( 'path' );
 
 const methods = {

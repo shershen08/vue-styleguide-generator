@@ -45,6 +45,7 @@ Idea is to have what [vue-play](https://github.com/vue-play/vue-play) does but i
 
  E.g.: ```node ./node_modules/vue-styleguide-generator/ --src components --dest preview``` will read components from PROJECT_ROOT/components folder and provide a html page into PROJECT_ROOT/preview folder
 
+ To see all parser error run with DEBUG: ```DEBUG=app node ./node_modules/vue-styleguide-generator/```
 
 #### How the components are iterated
 

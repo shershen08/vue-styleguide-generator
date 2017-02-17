@@ -182,7 +182,7 @@ const getComponentData = ( component ) => {
     if ( component.data && typeof component.data === 'function' ) return component.data();
   }
   catch ( e ) {
-    // utils.logParsingError( e )
+     utils.logParsingError( e )
   }
 
 }

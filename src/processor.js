@@ -2,7 +2,7 @@ var parse = require( './parser' )
 var babel = require( 'babel-core' )
 const vm = require( 'vm' )
 
-//var utils = require( './utils' )
+var utils = require( './utils' )
 
 module.exports = {
   processComponent: ( content ) => {
@@ -34,7 +34,7 @@ const evalComponentCode = ( code ) => {
     return sandbox.exports.default
   }
   catch ( e ) {
-    //utils.logParsingError( e )
+    utils.logParsingError( e )
   }
 }
 const sandbox = {
