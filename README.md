@@ -1,6 +1,6 @@
 # Vue js components styleguide generator 📚
 
-![dependancies status](https://david-dm.org/shershen08/vue-styleguide-generator/status.svg)
+![dependencies status](https://david-dm.org/shershen08/vue-styleguide-generator/status.svg)
 
 > Initially started after reading [this vue.js feature request](https://github.com/vuejs/vue-requests/issues/17).
 Now only basic proof of concept is available which can load folder with .vue files, parse it and extract basic props of it.
@@ -36,7 +36,7 @@ Idea is to have what [vue-play](https://github.com/vue-play/vue-play) does but i
 
 #### CLI options
 
-| Name | Type | Default | Description |
+| Name | Type | Description | Default |
 | ---: | ---- |  ------ |------------ |
 | --src  | String|Source dir, will be recursively scanned|src|
 | --dest | String|Destination output dir, file index.html will be placed there| components-preview|
@@ -80,7 +80,6 @@ Especially on following:
 ### Bugs and problems
 -  window object [may not be patched fully](https://github.com/shershen08/vue-styleguide-generator/blob/master/src/processor.js#L29) so some component's code execution may fail
 - 'vue-template-compiler' must be the same as the version of 'vue' you're using in your codebase. Now set to 2.1.10. may have to manually put to other version that's used in your project.
-
 
 ## License
 
