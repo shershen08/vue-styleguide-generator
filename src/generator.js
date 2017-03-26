@@ -3,20 +3,17 @@ var fs = require( 'fs' )
 var markdown = require( 'markdown' ).markdown
 var Q = require( 'q' )
 var css = require( 'css' )
-
-var Spinner = require( 'cli-spinner' ).Spinner;
 var debug = require('debug')('app');
-
 
 var fileProcessor = require( './processor' )
 var drawer = require( './drawer' )
 var utils = require( './utils' )
 var walker = require( './walker' )
 
-var spinner;
 const OUTPUT_FILENAME = 'index.html'
 const CUSTOM_CSS = 'style/custom-styles.css'
 let fileReadingList = [];
+let allComponentsFiles = []
 
 let runOptions
 
@@ -24,25 +21,16 @@ module.exports = {
   iterateComponentsFolder: ( options ) => {
     runOptions = options
 
-    startSpinner();
     walker.walk( options.src, runOptions, function ( result ) {
       sortOutResultingList( result )
     })
   }
 }
-const startSpinner = () => {
-  if( runOptions.verbose ) return;
-  spinner = new Spinner( runOptions.i18n.console_processing + '... %s' );
-  spinner.setSpinnerString( 0 );
-  spinner.start(true);
-}
-
 const sortOutResultingList = ( list ) => {
   var nonEmpty = list.filter(( x ) => x.files.length )
   let flatFileList = []
 
   nonEmpty.forEach( function ( elem ) {
-
 
 
     if ( elem.files.length === 1 ) {
@@ -83,8 +71,6 @@ const generateFullPage = ( treeArray ) => {
     fs.mkdirSync( dirPath )
   }
   fs.writeFileSync( pagePath, drawer.generatePage( data ) )
-  console.timeEnd();
-  if(spinner) spinner.stop();
 }
 const generateFiles = ( files ) => {
 
@@ -108,7 +94,6 @@ const generateFiles = ( files ) => {
       })
 
       generateFullPage( modifyComponentsTree( processedResults ) )
-      console.log('');
       logResult( files.length, runOptions.i18n.console_processed )
     }).catch(function(err){
       debug(err);
@@ -145,7 +130,7 @@ const processWithReadmeFiles = ( fileObject ) => {
   if ( runOptions.verbose ) logResult( runOptions.i18n.console_processing, fileObject.file )
 
   const readmeContent = readMDfile( fileObject.readme )
-  return readComponent( fileObject, {})//readmeContent )
+  return readComponent( fileObject, readmeContent )
 }
 const isSimpleWrapperComponent = ( obj ) => {
   if ( !obj.methods.length && !obj.props.length && !obj.computed.length ) return true
@@ -157,41 +142,46 @@ const readComponent = ( fileObject, readmeHTML ) => {
   fileReadingList.push( dfd.promise );
 
   const loadFile = fileObject.file
-//setTimeout(() => {
+
   fs.readFile( loadFile,  { encoding: 'utf-8' }, function read( err, data ) {
     if ( err ) {
       throw err;
     }
-    dfd.resolve( processComponent( data, loadFile ) );
+
+    dfd.resolve( processComponent( data, loadFile, readmeHTML ) );
   })
- //}, 0)
 
 }
-const processComponent = ( vueFile, fileName ) => {
-  let componentObject = fileProcessor.processComponent( vueFile )
-  if ( componentObject && !isEmpty( componentObject ) ) {
-    let prettyName = componentObject.name || path.basename( fileName ).split( '.' )[ 0 ]
-    let data = {
-      _isWrapper: false,
-      itemTitle: prettyName,
-      fileName: fileName,
-      compInitialData: getComponentData( componentObject ),
-      computed: utils.showIfAny( componentObject.computed ),
-      props: drawer.generatePropsDetails( componentObject.props ),
-      methods: utils.showIfAny( componentObject.methods ),
-      componentCode: drawer.generateUsageCode( componentObject, prettyName ),
-      htmlBlockId: path.basename( fileName ).split( '.' )[ 0 ],
-      readmeHTML: false ? readmeHTML : ''
-    }
+const processComponent = ( vueFile, fileName, readmeHTML ) => {
+  
+  let componentObjectRequest = fileProcessor.processComponentJSCode( vueFile, fileName )
 
-    if ( isSimpleWrapperComponent( data ) ) {
-      data._isWrapper = true
-    }
+  componentObjectRequest.then(function(componentObject){
 
-    return data
-  }
+    if ( componentObject && !isEmpty( componentObject ) ) {
+      //TODO: this check is obsolete now ?
+      let prettyName = componentObject.name || path.basename( fileName ).split( '.' )[ 0 ]
+      let data = {
+        _isWrapper: false,
+        itemTitle: prettyName,
+        fileName: fileName,
+        compInitialData: getComponentData( componentObject ),
+        computed: utils.showIfAny( componentObject.computed ),
+        props: drawer.generatePropsDetails( componentObject.props ),
+        methods: utils.showIfAny( componentObject.methods ),
+        componentCode: drawer.generateUsageCode( componentObject, prettyName ),
+        htmlBlockId: path.basename( fileName ).split( '.' )[ 0 ],
+        readmeHTML: readmeHTML ? readmeHTML : ''
+      }
+
+      if ( isSimpleWrapperComponent( data ) ) {
+        data._isWrapper = true
+      }
+
+      return data
+    }
+  })
 }
-
 const isEmpty = ( obj ) => Object.keys( obj ).length === 0 && obj.constructor === Object;
 const getComponentData = ( component ) => {
 
