@@ -31,7 +31,8 @@ table.props-table thead {
   padding: 5px 20px;
 }
 ul.methods-list {
-  margin: 0px; padding: 0px;
+  margin: 0;
+  padding: 0;
 }
 ul.methods-list li {
       list-style-type: none;
@@ -54,7 +55,7 @@ ul.list li {
   list-style-type: none;
 }
 .component-lib .search-area input {
-  margin: 10px 0px 0px 20px;
+  margin: 10px 0 0 20px;
 }
 
 /* footer */
@@ -66,7 +67,7 @@ ul.list li {
   background: #fff;
 }
 .component-lib  footer p {
-  padding: 10px 0px 10px 20px;
+  padding: 10px 0 10px 20px;
   margin: 0;
   color: #ccc;
 }
