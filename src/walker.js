@@ -1,7 +1,6 @@
-var path = require('path')
-var fs = require('fs')
 var dir = require('node-dir')
-var Q = require('Q')
+var Q = require('q')
+var debug = require('debug')('app');
 
 let runOptions
 let folderSearchCallbacks = []
@@ -37,7 +36,7 @@ const collectFiles = (foldersArray) => {
     })
   })
 }
-const getSubDirsList = (dirPath, callback) => {
+const getSubDirsList = (dirPath) => {
   var dfd = Q.defer()
 
   dir.subdirs(dirPath, function (err, subdirs) {
@@ -66,7 +65,7 @@ const readFlatFiles = (dirPath) => {
   return dfd.promise
 }
 const treeParsingErrorCallback = (error) => {
-  console.log('Smth went wrong.', error)
+  debug('Smth went wrong.', error)
 }
 const mainIterator = (folderFromName, optionsObj, callback) => {
   runOptions = optionsObj

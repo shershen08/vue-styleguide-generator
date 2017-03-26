@@ -1,12 +1,13 @@
 {
   "name": "vue-styleguide-generator",
-  "version": "0.9.7",
+  "version": "0.9.9",
   "description": "Styleguide generator for your Vue.js components",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node-debug index.js",
-    "build": "node ./index.js"
+    "build": "node ./index.js",
+    "lint": "eslint --ext .js,.vue src"
   },
   "author": {
     "name": "Mikhail Kuznetcov",
@@ -29,6 +30,7 @@
   "dependencies": {
     "consolidate": "^0.14.0",
     "css": "^2.2.1",
+    "debug": "^2.6.1",
     "hash-sum": "^1.0.2",
     "js-beautify": "^1.6.3",
     "loader-utils": "^0.2.10",
@@ -49,12 +51,17 @@
     "vue-style-loader": "^1.0.0",
     "vue-template-compiler": "^2.1.10",
     "vue-template-es2015-compiler": "^1.2.2",
-     "cli-spinner": "^0.2.6"
+    "cli-spinner": "^0.2.6",
+    "babel-core": "^6.22.1"
   },
   "devDependencies": {
     "babel-cli": "^6.22.2",
-    "babel-core": "^6.22.1",
     "babel-preset-es2015": "^6.22.0",
-    "convert-source-map": "^1.3.0"
+    "convert-source-map": "^1.3.0",
+    "eslint": "^3.15.0",
+    "eslint-plugin-node": "^4.0.1"
+  },
+  "engines": {
+    "node": ">=6.0.0"
   }
 }

@@ -1,5 +1,7 @@
 # Vue js components styleguide generator 📚
 
+![dependencies status](https://david-dm.org/shershen08/vue-styleguide-generator/status.svg)
+
 > Initially started after reading [this vue.js feature request](https://github.com/vuejs/vue-requests/issues/17).
 Now only basic proof of concept is available which can load folder with .vue files, parse it and extract basic props of it.
 
@@ -34,7 +36,7 @@ Idea is to have what [vue-play](https://github.com/vue-play/vue-play) does but i
 
 #### CLI options
 
-| Name | Type | Default | Description |
+| Name | Type | Description | Default |
 | ---: | ---- |  ------ |------------ |
 | --src  | String|Source dir, will be recursively scanned|src|
 | --dest | String|Destination output dir, file index.html will be placed there| components-preview|
@@ -45,6 +47,7 @@ Idea is to have what [vue-play](https://github.com/vue-play/vue-play) does but i
 
  E.g.: ```node ./node_modules/vue-styleguide-generator/ --src components --dest preview``` will read components from PROJECT_ROOT/components folder and provide a html page into PROJECT_ROOT/preview folder
 
+ To see all parser error run with DEBUG: ```DEBUG=app node ./node_modules/vue-styleguide-generator/```
 
 #### How the components are iterated
 
@@ -60,6 +63,7 @@ Idea is to have what [vue-play](https://github.com/vue-play/vue-play) does but i
 
 ### Todos
 
+- syntax highlighting
 - core: add tests
 - align parsing and display with [vue-js-component-style-guide](https://medium.com/tldr-tech/vue-js-component-style-guide-711988d5e94e)
 - core: move the demo-page to use Vue so that components can be generated from its declaration
@@ -76,3 +80,7 @@ Especially on following:
 ### Bugs and problems
 -  window object [may not be patched fully](https://github.com/shershen08/vue-styleguide-generator/blob/master/src/processor.js#L29) so some component's code execution may fail
 - 'vue-template-compiler' must be the same as the version of 'vue' you're using in your codebase. Now set to 2.1.10. may have to manually put to other version that's used in your project.
+
+## License
+
+MIT

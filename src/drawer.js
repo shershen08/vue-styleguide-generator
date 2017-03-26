@@ -5,9 +5,6 @@ var utils = require('./utils')
 const TEMPLATES_FOLDER = 'templates'
 const TEMPLATES_PARTIALS_FOLDER = 'partials'
 
-let componentTemplate
-let pageTemplate
-
 module.exports = {
   generatePropsDetails: function (propsArray) {
     if (!propsArray) return []
