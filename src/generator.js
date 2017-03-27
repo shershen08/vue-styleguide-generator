@@ -81,9 +81,7 @@ const generateFiles = ( files ) => {
       return !( path.basename( fileObject.file ).split( '.' )[ 1 ] === 'md' )
     })
 
-    files.forEach( function ( fileItem ) {
-      fileItem.readme ? processWithReadmeFiles( fileItem ) : processSingleFiles( fileItem )
-    })
+    files.forEach( ( fileItem ) => processSingleFile( fileItem ))
 
     Q.allSettled( fileReadingList ).then( function ( results ) {
       let finalResults = modifyComponentsTree(formResultsStructure(clearEmptyResults(results)))
@@ -127,49 +125,44 @@ const addInlinedCSS = ( cssPath ) => {
   })
 }
 
-const processSingleFiles = ( fileObject ) => {
+const processSingleFile = ( fileObject ) => {
   if ( runOptions.verbose ) logResult( runOptions.i18n.console_processing, fileObject.file )
   return readComponent( fileObject )
-}
-const processWithReadmeFiles = ( fileObject ) => {
-  if ( runOptions.verbose ) logResult( runOptions.i18n.console_processing, fileObject.file )
-
-  const readmeContent = readMDfile( fileObject.readme )
-  return readComponent( fileObject, readmeContent )
 }
 const isSimpleWrapperComponent = ( obj ) => {
   if ( !obj.methods.length && !obj.props.length && !obj.computed.length ) return true
   return false
 }
 
-const readComponent = ( fileObject, readmeHTML ) => {
+const readComponent = ( fileObject ) => {
   var dfd = Q.defer()
   fileReadingList.push( dfd.promise );
-
   const loadFile = fileObject.file
-
-  fs.readFile( loadFile,  { encoding: 'utf-8' }, function read( err, data ) {
+  
+  fs.readFile( loadFile,  { encoding: 'utf-8' }, function read( err, readFileData ) {
     if ( err ) {
       throw err;
     }
 
-    processComponent( data, loadFile, readmeHTML ).then(function(result){
+    processComponent( readFileData, fileObject ).then(function(result){
       dfd.resolve( result )
     }).catch(function(errorProcessing){
       debug(errorProcessing);
     })
   })
-
 }
-const processComponent = ( vueFile, fileName, readmeHTML ) => {
+
+const processComponent = ( vueFile, fileObject ) => {
   var dfd = Q.defer()
+
+  const fileName = fileObject.file
 
   fileProcessor.processComponentJSCode( vueFile, fileName ).then(function(componentObject){
     if ( componentObject && !isEmpty( componentObject ) ) {
 
       let component = Object.assign({},
         generateComponentObject(componentObject),
-        getComponentReadme(readmeHTML),
+        getComponentReadme(fileObject.readme),
         addFileNameRelatedProps(component.name, fileName))
       dfd.resolve(component)
     } else {
@@ -178,9 +171,12 @@ const processComponent = ( vueFile, fileName, readmeHTML ) => {
   })
   return dfd.promise
 }
-const getComponentReadme = (readmeHTML) => {
-  return readmeHTML ? {readmeHTML} : {}
+
+const getComponentReadme = (readmeFileName) => {
+  const readmeHTML = readmeFileName ? readMDfile( readmeFileName ) : ''
+  return readmeFileName ? {readmeHTML} : {}
 }
+
 const addFileNameRelatedProps = (componentName, fileName) => {
   const baseFileName = path.basename( fileName ).split( '.' )[ 0 ]
   return {
@@ -189,6 +185,7 @@ const addFileNameRelatedProps = (componentName, fileName) => {
     htmlBlockId: baseFileName
   }
 }
+
 const generateComponentObject = (componentObject) => {
       let data = {
         compInitialData: getComponentData( componentObject ),
@@ -213,6 +210,7 @@ const getComponentData = ( component ) => {
   }
 
 }
+
 const readMDfile = ( loadFile ) => {
   let mdFile = fs.readFileSync( loadFile, { encoding: 'utf-8' })
   return markdown.toHTML( mdFile )
