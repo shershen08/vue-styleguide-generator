@@ -86,14 +86,17 @@ const generateFiles = ( files ) => {
     })
 
     Q.allSettled( fileReadingList ).then( function ( results ) {
-      let processedResults = results.map( function ( item ) {
-        return item.value ? {
+
+      let processedResult = results.filter(( x ) =>  x.value && x.value.fileName)
+
+      let finalResults = processedResult.map( ( item ) => {
+        return {
           comp: item.value,
           link: item.value.fileName
-        } : {};
+        };
       })
 
-      generateFullPage( modifyComponentsTree( processedResults ) )
+      generateFullPage( modifyComponentsTree( finalResults ) )
       logResult( files.length, runOptions.i18n.console_processed )
     }).catch(function(err){
       debug(err);
@@ -148,18 +151,25 @@ const readComponent = ( fileObject, readmeHTML ) => {
       throw err;
     }
 
-    dfd.resolve( processComponent( data, loadFile, readmeHTML ) );
+    processComponent( data, loadFile, readmeHTML ).then(function(result){
+      dfd.resolve( result )
+    }).catch(function(errorProcessing){
+      debug(errorProcessing);
+    })
   })
 
 }
 const processComponent = ( vueFile, fileName, readmeHTML ) => {
   
+  var dfd = Q.defer()
+
   let componentObjectRequest = fileProcessor.processComponentJSCode( vueFile, fileName )
 
   componentObjectRequest.then(function(componentObject){
 
     if ( componentObject && !isEmpty( componentObject ) ) {
       //TODO: this check is obsolete now ?
+
       let prettyName = componentObject.name || path.basename( fileName ).split( '.' )[ 0 ]
       let data = {
         _isWrapper: false,
@@ -178,9 +188,13 @@ const processComponent = ( vueFile, fileName, readmeHTML ) => {
         data._isWrapper = true
       }
 
-      return data
+      dfd.resolve(data)
+    } else {
+       dfd.resolve({})
     }
   })
+
+  return dfd.promise
 }
 const isEmpty = ( obj ) => Object.keys( obj ).length === 0 && obj.constructor === Object;
 const getComponentData = ( component ) => {
