@@ -86,17 +86,8 @@ const generateFiles = ( files ) => {
     })
 
     Q.allSettled( fileReadingList ).then( function ( results ) {
-
-      let processedResult = results.filter(( x ) =>  x.value && x.value.fileName)
-
-      let finalResults = processedResult.map( ( item ) => {
-        return {
-          comp: item.value,
-          link: item.value.fileName
-        };
-      })
-
-      generateFullPage( modifyComponentsTree( finalResults ) )
+      let finalResults = modifyComponentsTree(formResultsStructure(clearEmptyResults(results)))
+      generateFullPage( finalResults )
       logResult( files.length, runOptions.i18n.console_processed )
     }).catch(function(err){
       debug(err);
@@ -105,6 +96,17 @@ const generateFiles = ( files ) => {
   } else {
     utils.logParsingError( runOptions.i18n.console_no_files_found )
   }
+}
+const clearEmptyResults = (results) => {
+  return results.filter(( x ) =>  x.value && x.value.fileName)
+}
+const formResultsStructure = (processedResult) => {
+   return processedResult.map( ( item ) => {
+      return {
+        comp: item.value,
+        link: item.value.fileName
+      };
+    })
 }
 const modifyComponentsTree = ( list ) => {
   let filtered = list
@@ -160,45 +162,48 @@ const readComponent = ( fileObject, readmeHTML ) => {
 
 }
 const processComponent = ( vueFile, fileName, readmeHTML ) => {
-  
   var dfd = Q.defer()
 
-  let componentObjectRequest = fileProcessor.processComponentJSCode( vueFile, fileName )
-
-  componentObjectRequest.then(function(componentObject){
-
+  fileProcessor.processComponentJSCode( vueFile, fileName ).then(function(componentObject){
     if ( componentObject && !isEmpty( componentObject ) ) {
-      //TODO: this check is obsolete now ?
 
-      let prettyName = componentObject.name || path.basename( fileName ).split( '.' )[ 0 ]
+      let component = Object.assign({},
+        generateComponentObject(componentObject),
+        getComponentReadme(readmeHTML),
+        addFileNameRelatedProps(component.name, fileName))
+      dfd.resolve(component)
+    } else {
+      dfd.resolve({})
+    }
+  })
+  return dfd.promise
+}
+const getComponentReadme = (readmeHTML) => {
+  return readmeHTML ? {readmeHTML} : {}
+}
+const addFileNameRelatedProps = (componentName, fileName) => {
+  const baseFileName = path.basename( fileName ).split( '.' )[ 0 ]
+  return {
+    itemTitle: componentName || baseFileName,
+    fileName: fileName,
+    htmlBlockId: baseFileName
+  }
+}
+const generateComponentObject = (componentObject) => {
       let data = {
-        _isWrapper: false,
-        itemTitle: prettyName,
-        fileName: fileName,
         compInitialData: getComponentData( componentObject ),
         computed: utils.showIfAny( componentObject.computed ),
         props: drawer.generatePropsDetails( componentObject.props ),
         methods: utils.showIfAny( componentObject.methods ),
         componentCode: drawer.generateUsageCode( componentObject, prettyName ),
-        htmlBlockId: path.basename( fileName ).split( '.' )[ 0 ],
-        readmeHTML: readmeHTML ? readmeHTML : ''
       }
 
-      if ( isSimpleWrapperComponent( data ) ) {
-        data._isWrapper = true
-      }
-
-      dfd.resolve(data)
-    } else {
-       dfd.resolve({})
-    }
-  })
-
-  return dfd.promise
+      data._isWrapper =  isSimpleWrapperComponent( data )
+      return data
 }
+
 const isEmpty = ( obj ) => Object.keys( obj ).length === 0 && obj.constructor === Object;
 const getComponentData = ( component ) => {
-
   try {
     if ( !component.data ) return '';
     if ( component.data && typeof component.data === 'function' ) return component.data();
