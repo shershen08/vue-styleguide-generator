@@ -43,6 +43,9 @@ code {
   display: block;
   white-space: pre-wrap;
 }
+.mdl-layout__drawer .mdl-navigation {
+  margin-bottom: 30px;
+}
 /* elements */
 .component-lib  .mdl-layout__drawer .mdl-navigation .mdl-navigation__link:hover {
   background: #a8eacc;
