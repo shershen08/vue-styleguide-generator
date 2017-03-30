@@ -13,6 +13,7 @@ var walker = require( './walker' )
 const OUTPUT_FILENAME = 'index.html'
 const CUSTOM_CSS = 'style/custom-styles.css'
 let fileReadingList = [];
+let allComponentsFiles = []
 
 let runOptions
 
@@ -85,14 +86,17 @@ const generateFiles = ( files ) => {
     })
 
     Q.allSettled( fileReadingList ).then( function ( results ) {
-      let processedResults = results.map( function ( item ) {
-        return item.value ? {
+
+      let processedResult = results.filter(( x ) =>  x.value && x.value.fileName)
+
+      let finalResults = processedResult.map( ( item ) => {
+        return {
           comp: item.value,
           link: item.value.fileName
-        } : {};
+        };
       })
 
-      generateFullPage( modifyComponentsTree( processedResults ) )
+      generateFullPage( modifyComponentsTree( finalResults ) )
       logResult( files.length, runOptions.i18n.console_processed )
     }).catch(function(err){
       debug(err);
@@ -146,33 +150,51 @@ const readComponent = ( fileObject, readmeHTML ) => {
     if ( err ) {
       throw err;
     }
-    dfd.resolve( processComponent( data, loadFile, readmeHTML ) );
+
+    processComponent( data, loadFile, readmeHTML ).then(function(result){
+      dfd.resolve( result )
+    }).catch(function(errorProcessing){
+      debug(errorProcessing);
+    })
   })
 
 }
 const processComponent = ( vueFile, fileName, readmeHTML ) => {
-  let componentObject = fileProcessor.processComponent( vueFile )
-  if ( componentObject && !isEmpty( componentObject ) ) {
-    let prettyName = componentObject.name || path.basename( fileName ).split( '.' )[ 0 ]
-    let data = {
-      _isWrapper: false,
-      itemTitle: prettyName,
-      fileName: fileName,
-      compInitialData: getComponentData( componentObject ),
-      computed: utils.showIfAny( componentObject.computed ),
-      props: drawer.generatePropsDetails( componentObject.props ),
-      methods: utils.showIfAny( componentObject.methods ),
-      componentCode: drawer.generateUsageCode( componentObject, prettyName ),
-      htmlBlockId: path.basename( fileName ).split( '.' )[ 0 ],
-      readmeHTML: readmeHTML ? readmeHTML : ''
-    }
+  
+  var dfd = Q.defer()
 
-    if ( isSimpleWrapperComponent( data ) ) {
-      data._isWrapper = true
-    }
+  let componentObjectRequest = fileProcessor.processComponentJSCode( vueFile, fileName )
 
-    return data
-  }
+  componentObjectRequest.then(function(componentObject){
+
+    if ( componentObject && !isEmpty( componentObject ) ) {
+      //TODO: this check is obsolete now ?
+
+      let prettyName = componentObject.name || path.basename( fileName ).split( '.' )[ 0 ]
+      let data = {
+        _isWrapper: false,
+        itemTitle: prettyName,
+        fileName: fileName,
+        compInitialData: getComponentData( componentObject ),
+        computed: utils.showIfAny( componentObject.computed ),
+        props: drawer.generatePropsDetails( componentObject.props ),
+        methods: utils.showIfAny( componentObject.methods ),
+        componentCode: drawer.generateUsageCode( componentObject, prettyName ),
+        htmlBlockId: path.basename( fileName ).split( '.' )[ 0 ],
+        readmeHTML: readmeHTML ? readmeHTML : ''
+      }
+
+      if ( isSimpleWrapperComponent( data ) ) {
+        data._isWrapper = true
+      }
+
+      dfd.resolve(data)
+    } else {
+       dfd.resolve({})
+    }
+  })
+
+  return dfd.promise
 }
 const isEmpty = ( obj ) => Object.keys( obj ).length === 0 && obj.constructor === Object;
 const getComponentData = ( component ) => {
