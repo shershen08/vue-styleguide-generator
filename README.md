@@ -11,6 +11,8 @@ Idea is to have what [vue-play](https://github.com/vue-play/vue-play) does but i
 
 **Generate single html file containing all components listed with details and search out from your .vue project files.**
 
+**Update:** Now as from 0.9.11 also your `.js` files referenced from `.vue` files are supported
+
 ## 1. Examples
 
 ### Running on large components collections
