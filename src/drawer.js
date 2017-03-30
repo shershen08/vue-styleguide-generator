@@ -12,7 +12,7 @@ module.exports = {
 
     if (propsArray.length) {
       return propsArray.map((p) => {
-        return {name: p,required: '',default: '',type: ''}
+        return {name: p, required: '',default: '',type: ''}
       })
     }
     Object.keys(propsArray).forEach(function (prop) {
@@ -23,12 +23,25 @@ module.exports = {
         default: '',
         type: ''
       }
-
+      
       if (typeof val === 'object') {
         if (val.required) res.required = val.required.toString()
         if (val.default) res.default = val.default
         if (val.type) {
           res.default = val.type.toString().split('()')[0].split(' ')[1]
+        }
+      } else if (typeof val === 'function') {
+        res.type =  '-'
+        if( val() === false){
+           res.default = 'Boolean'
+        } else if (typeof val() === "string") {
+          res.default = 'String'
+        // } else if (typeof val() === "string" && val().indexOf("Date") > -1) {
+        //   res.default = 'Date'
+        } else if (typeof val() === "number") {
+          res.default = 'Number'
+        } else {
+          res.default = 'Boolean'
         }
       }
       tableListArray.push(res)
