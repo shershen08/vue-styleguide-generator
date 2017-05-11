@@ -17,8 +17,8 @@ Idea is to have what [vue-play](https://github.com/vue-play/vue-play) does but i
 
 ### Questions & bugs
 
- - General questions please ping me on twitter [@legkoletat](https://twitter.com/legkoletat)
- - Bugs and inconsistencies please create [an issue](https://github.com/shershen08/vue-styleguide-generator/issues)
+ - General questions please ping me on twitter [@legkoletat](https://twitter.com/legkoletat).
+ - Bugs and inconsistencies please create [an issue](https://github.com/shershen08/vue-styleguide-generator/issues) . Please concider to adding more information on what is the codebase you're running the generator against, what errors (with code, if applicable) you got. To keep issues list clean and relevant issues with no feedback/details/activity will be closed within 3 days.
 
 
 ## 1. Examples
