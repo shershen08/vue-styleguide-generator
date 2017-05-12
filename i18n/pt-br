@@ -1,0 +1,14 @@
+{
+  "console_processed":" arquivos processados",
+  "console_error":" erro aconteceu",
+  "console_processing":"Processando ",
+  "console_no_files_found":"Nenhum arquivo de componentes encontrado",
+  "html_components_title":"Coleção",
+  "html_page_title":"Guia de estilos de componentes",
+  "html_component_subtitle_props":"Props",
+  "html_component_subtitle_methods":"Métodos",
+  "html_component_subtitle_usage":"Uso",
+  "html_component_subtitle_readme":"Readme",
+  "html_component_search":"Buscar...",
+  "html_component_footer":"Biblioteca de componentes Vue &copy; 2017"
+}
