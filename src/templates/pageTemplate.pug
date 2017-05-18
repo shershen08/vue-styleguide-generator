@@ -6,8 +6,8 @@ html
       div(class="mdl-layout__drawer",id="plugin-list")
         form
           .mdl-textfield.mdl-js-textfield.search-area
-            input(class="mdl-textfield__input js-component-search search",type="text",placeholder="Search...",id="search-input")
-        span(class="mdl-layout-title") Collection
+            input(class="mdl-textfield__input js-component-search search",type="text",placeholder=`${i18n.html_component_search}`,id="search-input")
+        span(class="mdl-layout-title") #{i18n.html_components_title}
         !=links
       main(class="mdl-layout__content")
         .page-content
@@ -16,16 +16,5 @@ html
     include partials/footer.pug
     style(type='text/css')
       !=inlineCss
-    script.
-      document.addEventListener("DOMContentLoaded", function(event) {
-        var options = {valueNames: ['name']};
-        var pluginList = new List('plugin-list', options);
-        if(window.hljs) highlightCodeBlocks();
-        document.getElementById('search-input').addEventListener('keyup', function(event) {
-          if(event.which === 27){ 
-            pluginList.search();
-            event.target.value = '';
-          }
-        }, false);
-      });
-      var highlightCodeBlocks =  function(event) {Array.prototype.forEach.call(document.getElementsByClassName('javascript'), function(block) {window.hljs.highlightBlock(block);})};
+    script
+      include client.js

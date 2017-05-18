@@ -62,7 +62,7 @@ const generateFullPage = ( treeArray ) => {
     links,
     comps,
     inlineCss: addInlinedCSS( CUSTOM_CSS ),
-    pageTitle: (parentProjectData.name ? parentProjectData.name : '') + ' ' + (parentProjectData.version ? parentProjectData.version : ' ') + ' ' + runOptions.title,
+    pageTitle: (parentProjectData.name ? parentProjectData.name : '') + ' ' + (parentProjectData.version ? parentProjectData.version : ' ') + ' ' + runOptions.i18n.html_page_title,
     i18n: runOptions.i18n
   }
   /*
