@@ -11,6 +11,7 @@ const parseOptions = () => {
   options.dest = argv.dest ? argv.dest : DEFAULT_DIST_DIR;
   options.locale = argv.locale ? argv.locale : DEFAULT_LOCALE;
   options.exclude = argv.exclude ? argv.exclude : undefined;
+  options.openBrowser = !!argv.o;
   options.verbose = !!argv.verbose;
   options.showall = !!argv.all;
   //options.serve = !!argv.serve; //todo: implement live watch display

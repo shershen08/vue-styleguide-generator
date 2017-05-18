@@ -60,7 +60,7 @@ const readFlatFiles = (dirPath) => {
     function (err, files) {
       if (err) throw err
       dfd.resolve({
-      dirPath,files})
+      dirPath, files})
     })
   return dfd.promise
 }

@@ -70,7 +70,13 @@ const generateFullPage = ( treeArray ) => {
   if ( !fs.existsSync( dirPath ) ) {
     fs.mkdirSync( dirPath )
   }
-  fs.writeFileSync( pagePath, drawer.generatePage( data ) )
+  fs.writeFile( pagePath,
+                drawer.generatePage( data ),
+              () => {
+                if(runOptions.openBrowser) {
+                  utils.openBrowser(pagePath);
+                }
+              })
 }
 const generateFiles = ( files ) => {
 

@@ -54,6 +54,7 @@ Idea is to have what [vue-play](https://github.com/vue-play/vue-play) does but i
 | --locale|String|Output locale language|en|
 | --verbose| String|Output all details while processing| false|
 | --all| String|Do not ignore any components| false|
+| --o| String|Open browser preview after generating| false|
 
  E.g.: ```node ./node_modules/vue-styleguide-generator/ --src components --dest preview``` will read components from PROJECT_ROOT/components folder and provide a html page into PROJECT_ROOT/preview folder
 
