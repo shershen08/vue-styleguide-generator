@@ -13,7 +13,9 @@ var walker = require( './walker' )
 const OUTPUT_FILENAME = 'index.html'
 const CUSTOM_CSS = 'style/custom-styles.css'
 let fileReadingList = [];
-let allComponentsFiles = []
+let allComponentsFiles = [];
+
+var parentProjectData = require(path.resolve( __dirname, '..', '..', '..', 'package.json'));
 
 let runOptions
 
@@ -59,7 +61,9 @@ const generateFullPage = ( treeArray ) => {
   let data = {
     links,
     comps,
-    inlineCss: addInlinedCSS( CUSTOM_CSS )
+    inlineCss: addInlinedCSS( CUSTOM_CSS ),
+    pageTitle: (parentProjectData.name ? parentProjectData.name : '') + ' ' + (parentProjectData.version ? parentProjectData.version : ' ') + ' ' + runOptions.title,
+    i18n: runOptions.i18n
   }
   /*
   * assumption, script path: PROJECT_ROOT/node_modules/vue-styleguide-generator/
