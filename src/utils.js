@@ -31,6 +31,13 @@ const methods = {
     if ((f1.split('.')[ 0 ] == f2.split('.')[ 0 ]) && (f1.split('.')[ 1 ] != f2.split('.')[ 1 ])) return true
     return false
   },
-  openBrowser: (fullLocalPath) => open(fullLocalPath)
+  openBrowser: (fullLocalPath) => open(fullLocalPath),
+  //assumption, script path: PROJECT_ROOT/node_modules/vue-styleguide-generator/
+  getToProjectRootFolder: () =>  path.resolve( __dirname, '..', '..', '..'),
+  generatePageTitle: (parentProjectData, titleEnding) => {
+    const projectName = (parentProjectData.name ? parentProjectData.name : '');
+    const projectVersion = (parentProjectData.version ? ('v' + parentProjectData.version) : ' ');
+    return [projectName, ' ', projectVersion, ' - ', titleEnding].join('');
+  }
 }
 module.exports = methods

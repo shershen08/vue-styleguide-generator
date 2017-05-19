@@ -12,11 +12,10 @@ var walker = require( './walker' )
 
 const OUTPUT_FILENAME = 'index.html'
 const CUSTOM_CSS = 'style/custom-styles.css'
+const parentProjectData = require(path.resolve(utils.getToProjectRootFolder(), 'package.json'));
+
 let fileReadingList = [];
 let allComponentsFiles = [];
-
-var parentProjectData = require(path.resolve( __dirname, '..', '..', '..', 'package.json'));
-
 let runOptions
 
 module.exports = {
@@ -62,15 +61,12 @@ const generateFullPage = ( treeArray ) => {
     links,
     comps,
     inlineCss: addInlinedCSS( CUSTOM_CSS ),
-    pageTitle: (parentProjectData.name ? parentProjectData.name : '') + ' ' + (parentProjectData.version ? parentProjectData.version : ' ') + ' ' + runOptions.i18n.html_page_title,
+    pageTitle: utils.generatePageTitle(parentProjectData, runOptions.i18n.html_page_title),
     i18n: runOptions.i18n
   }
-  /*
-  * assumption, script path: PROJECT_ROOT/node_modules/vue-styleguide-generator/
-  * assumption, output path PROJECT_ROOT/<runOptions.dest>
-  */
-  var dirPath = path.resolve( __dirname, '..', '..', '..', runOptions.dest )
-  var pagePath = path.resolve( __dirname, '..', '..', '..', runOptions.dest, OUTPUT_FILENAME )
+
+  var dirPath = path.resolve(utils.getToProjectRootFolder(), runOptions.dest )
+  var pagePath = path.resolve(utils.getToProjectRootFolder(), runOptions.dest, OUTPUT_FILENAME )
   if ( !fs.existsSync( dirPath ) ) {
     fs.mkdirSync( dirPath )
   }
