@@ -30,7 +30,9 @@ section(id=htmlBlockId,class="component")
   //Usage
   if componentCode
     h4 Usage
-    code(class="javascript")= componentCode
+    div(class="code-block")
+      button(class="copy-button", onClick="CopyClipboard(this);") Copy
+      code(class="javascript")= componentCode
   //Readme
   if readmeHTML
     h4 Readme

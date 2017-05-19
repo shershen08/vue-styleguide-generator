@@ -74,3 +74,21 @@ ul.list li {
   margin: 0;
   color: #ccc;
 }
+.copy-button {
+  position: absolute;
+  right: 7%;
+  float: right;
+  top: 20%;
+  z-index: 100000;
+  border: none;
+  padding: 20px 40px;
+  cursor: pointer;
+  color: white;
+  background: #ddd !important;
+}
+.copy-button:hover {
+  background: #aaaddd !important;
+}
+.code-block {
+  position: relative;
+}
