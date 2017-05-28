@@ -11,10 +11,6 @@ Idea is to have what [vue-play](https://github.com/vue-play/vue-play) does but i
 
 **Generate single html file containing all components listed with details and search out from your .vue project files.**
 
-**Update:** Now as from 0.9.11 also your `.js` files referenced from `.vue` files are supported
-
-
-
 ### Questions & bugs
 
  - General questions please ping me on twitter [@legkoletat](https://twitter.com/legkoletat).
@@ -74,8 +70,8 @@ Idea is to have what [vue-play](https://github.com/vue-play/vue-play) does but i
 
 ### Todos
 
-- syntax highlighting
-- core: add tests
+- improve parsing technique and/or configuration to deal with variety of components organisation approaches
+- <s>syntax highlighting</s>
 - align parsing and display with [vue-js-component-style-guide](https://medium.com/tldr-tech/vue-js-component-style-guide-711988d5e94e)
 - core: move the demo-page to use Vue so that components can be generated from its declaration
 - ui: output extra component parameters (computable, data)
@@ -92,7 +88,23 @@ Especially on following:
 -  window object [may not be patched fully](https://github.com/shershen08/vue-styleguide-generator/blob/master/src/processor.js#L29) so some component's code execution may fail
 - 'vue-template-compiler' must be the same as the version of 'vue' you're using in your codebase. Now set to 2.1.10. may have to manually put to other version that's used in your project.'
 
+### Changelog
+
+ **0.9.11**
  
+ Now as from 0.9.11 also your `.js` files referenced from `.vue` files are supported.
+
+ **0.9.15**
+ 
+ Added `-o` option to open the browser.
+ Refactoring the template. Added pt-br translation by [israelss](https://github.com/israelss).
+
+ **0.9.18**
+ 
+ UI improvements (UX of the search block, 'Copy' component code).
+
+
+
 ## License
 
 MIT
