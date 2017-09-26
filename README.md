@@ -1,3 +1,7 @@
+🙀 **[20/09/2017] Project discontinued** 🙀 
+
+For purpose of having a demo of your Vuejs components please take a look at following projects that do really great job and are really handy for you dev workflow with Vuejs: [storybook for vuejs](https://github.com/storybooks/storybook) and [vue-styleguidist](https://github.com/vue-styleguidist/vue-styleguidist).
+
 # Vue js components styleguide generator 📚
 
 ![dependencies status](https://david-dm.org/shershen08/vue-styleguide-generator/status.svg)
